@@ -43,7 +43,7 @@ const SOFT_SKILLS = [
     "Entregar Resultados"
 ];
 
-// Dados da planilha original
+// Dados da planilha original (serão migrados como Q2-2026)
 const DADOS_PLANILHA = [
     { nome: "André Novaes", email: "andre.novaes@clouddog.com.br", area: "DEVOPS", hard: [3,2,3,2,3,4,2,2,1,3,2,1,1,1,1,1,1,1,1,1,1,1,2], soft: [4,3,2,4,3,4,3,4,3,3,4,2,4] },
     { nome: "Bruno Loschi", email: "bruno.loschi@clouddog.com.br", area: "SRE", hard: [3,3,3,1,3,3,3,3,2,3,3,3,1,1,2,1,1,2,1,1,3,1,3], soft: [4,4,3,3,3,3,3,2,3,3,3,3,3] },
@@ -66,7 +66,8 @@ const DADOS_PLANILHA = [
 
 // Estado global da aplicação
 const state = {
-    colaboradores: [],
+    colaboradores: [],   // Lista de perfis (nome, email, area)
+    avaliacoes: [],      // Lista de avaliações com quarter
     currentQuarter: "Q2-2026"
 };
 
@@ -108,60 +109,127 @@ function showToast(msg, type = 'success') {
     setTimeout(() => { toast.className = 'toast'; }, 3000);
 }
 
+// Buscar avaliação de um colaborador no quarter atual
+function getAvaliacaoAtual(email) {
+    return state.avaliacoes.find(a => a.email === email && a.quarter === state.currentQuarter);
+}
+
 // ============================================
 // FIRESTORE: CARREGAR E SALVAR
 // ============================================
-async function carregarColaboradores() {
+async function carregarDados() {
     try {
-        const snapshot = await db.collection("colaboradores").get();
-        const firebaseData = [];
-        snapshot.forEach(doc => {
-            firebaseData.push({ id: doc.id, ...doc.data() });
+        // Carregar perfis de colaboradores
+        const colabSnapshot = await db.collection("colaboradores").get();
+        const firebaseColabs = [];
+        colabSnapshot.forEach(doc => {
+            firebaseColabs.push({ id: doc.id, ...doc.data() });
         });
 
-        // Merge: dados planilha como base, sobreescrever com Firebase se existir
-        const emailsFirebase = firebaseData.map(c => c.email);
+        // Carregar avaliações
+        const avalSnapshot = await db.collection("avaliacoes").get();
+        const firebaseAvals = [];
+        avalSnapshot.forEach(doc => {
+            firebaseAvals.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Merge com dados da planilha (perfis)
+        const emailsFirebase = firebaseColabs.map(c => c.email);
         DADOS_PLANILHA.forEach(p => {
             if (!emailsFirebase.includes(p.email)) {
-                firebaseData.push({ ...p, id: null });
+                firebaseColabs.push({ id: null, nome: p.nome, email: p.email, area: p.area });
             }
         });
 
-        state.colaboradores = firebaseData;
-        console.log(`✅ ${state.colaboradores.length} colaboradores carregados`);
+        // Merge avaliações da planilha (como Q2-2026)
+        DADOS_PLANILHA.forEach(p => {
+            if (p.hard && p.soft) {
+                const jaExiste = firebaseAvals.find(a => a.email === p.email && a.quarter === "Q2-2026");
+                if (!jaExiste) {
+                    firebaseAvals.push({
+                        id: null,
+                        email: p.email,
+                        quarter: "Q2-2026",
+                        hard: p.hard,
+                        soft: p.soft
+                    });
+                }
+            }
+        });
+
+        state.colaboradores = firebaseColabs;
+        state.avaliacoes = firebaseAvals;
+        console.log(`✅ ${state.colaboradores.length} colaboradores, ${state.avaliacoes.length} avaliações carregadas`);
     } catch (err) {
         console.warn("Firebase não configurado, usando dados locais:", err.message);
-        state.colaboradores = DADOS_PLANILHA.map(p => ({ ...p, id: null }));
+        state.colaboradores = DADOS_PLANILHA.map(p => ({ id: null, nome: p.nome, email: p.email, area: p.area }));
+        state.avaliacoes = DADOS_PLANILHA.filter(p => p.hard && p.soft).map(p => ({
+            id: null,
+            email: p.email,
+            quarter: "Q2-2026",
+            hard: p.hard,
+            soft: p.soft
+        }));
     }
 
     popularSelects();
+    popularSelectCadastro();
     renderNineBox();
 }
 
 async function salvarColaborador(dados) {
+    const { nome, email, area, hard, soft, quarter } = dados;
+
     try {
-        const existente = state.colaboradores.find(c => c.email === dados.email);
-        if (existente && existente.id) {
-            await db.collection("colaboradores").doc(existente.id).update(dados);
-            Object.assign(existente, dados);
-            showToast("Colaborador atualizado com sucesso!", "success");
+        // Salvar/atualizar perfil
+        const perfilExistente = state.colaboradores.find(c => c.email === email);
+        if (perfilExistente && perfilExistente.id) {
+            await db.collection("colaboradores").doc(perfilExistente.id).update({ nome, email, area });
+            Object.assign(perfilExistente, { nome, email, area });
         } else {
-            const docRef = await db.collection("colaboradores").add(dados);
-            state.colaboradores.push({ id: docRef.id, ...dados });
-            showToast("Colaborador cadastrado com sucesso!", "success");
+            const docRef = await db.collection("colaboradores").add({ nome, email, area });
+            if (perfilExistente) {
+                perfilExistente.id = docRef.id;
+                Object.assign(perfilExistente, { nome, email, area });
+            } else {
+                state.colaboradores.push({ id: docRef.id, nome, email, area });
+            }
         }
+
+        // Salvar/atualizar avaliação do quarter
+        const avalDocId = `${email.replace(/[^a-zA-Z0-9]/g, '_')}_${quarter}`;
+        const avalData = { email, quarter, hard, soft };
+        await db.collection("avaliacoes").doc(avalDocId).set(avalData);
+
+        const avalExistente = state.avaliacoes.find(a => a.email === email && a.quarter === quarter);
+        if (avalExistente) {
+            Object.assign(avalExistente, avalData);
+        } else {
+            state.avaliacoes.push({ id: avalDocId, ...avalData });
+        }
+
+        showToast("Avaliação salva com sucesso!", "success");
     } catch (err) {
         // Fallback local
-        const existente = state.colaboradores.find(c => c.email === dados.email);
-        if (existente) {
-            Object.assign(existente, dados);
+        const perfilExistente = state.colaboradores.find(c => c.email === email);
+        if (!perfilExistente) {
+            state.colaboradores.push({ id: Date.now().toString(), nome, email, area });
         } else {
-            state.colaboradores.push({ id: Date.now().toString(), ...dados });
+            Object.assign(perfilExistente, { nome, email, area });
         }
+
+        const avalExistente = state.avaliacoes.find(a => a.email === email && a.quarter === quarter);
+        if (avalExistente) {
+            Object.assign(avalExistente, { hard, soft });
+        } else {
+            state.avaliacoes.push({ id: Date.now().toString(), email, quarter, hard, soft });
+        }
+
         showToast("Salvo localmente (Firebase não configurado)", "success");
     }
 
     popularSelects();
+    popularSelectCadastro();
     renderNineBox();
 }
 
@@ -169,11 +237,22 @@ async function salvarColaborador(dados) {
 // POPULAR SELECTS
 // ============================================
 function popularSelects() {
-    const avaliados = state.colaboradores.filter(c => c.hard && c.soft);
+    // Colaboradores que têm avaliação no quarter atual
+    const avaliadosEmails = state.avaliacoes
+        .filter(a => a.quarter === state.currentQuarter)
+        .map(a => a.email);
+
+    const avaliados = state.colaboradores.filter(c => avaliadosEmails.includes(c.email));
     const opts = avaliados.map(c => `<option value="${c.email}">${c.nome} (${c.area})</option>`).join('');
 
     document.getElementById('colaborador-select').innerHTML = '<option value="">Selecione um colaborador</option>' + opts;
     document.getElementById('plano-colaborador-select').innerHTML = '<option value="">Selecione um colaborador</option>' + opts;
+}
+
+function popularSelectCadastro() {
+    // Todos os colaboradores para edição
+    const opts = state.colaboradores.map(c => `<option value="${c.email}">${c.nome} (${c.area})</option>`).join('');
+    document.getElementById('editar-colaborador-select').innerHTML = '<option value="">-- Novo colaborador --</option>' + opts;
 }
 
 // ============================================
@@ -189,11 +268,19 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 });
 
 // ============================================
-// QUARTER
+// QUARTER - mudança atualiza tudo
 // ============================================
 document.getElementById('quarter-select').addEventListener('change', function () {
     state.currentQuarter = this.value;
+    popularSelects();
     renderNineBox();
+    // Limpar resumo e plano atuais
+    document.getElementById('resumo-detalhe').innerHTML = '';
+    document.getElementById('plano-conteudo').innerHTML = '';
+    document.getElementById('colaborador-select').value = '';
+    document.getElementById('plano-colaborador-select').value = '';
+    // Atualizar pré-preenchimento do cadastro
+    preencherFormularioEdicao();
 });
 
 // ============================================
@@ -206,7 +293,8 @@ document.getElementById('colaborador-select').addEventListener('change', functio
         return;
     }
     const colab = state.colaboradores.find(c => c.email === email);
-    if (colab) renderResumo(colab);
+    const avaliacao = getAvaliacaoAtual(email);
+    if (colab && avaliacao) renderResumo(colab, avaliacao);
 });
 
 // SELECT COLABORADOR → PLANO
@@ -217,17 +305,58 @@ document.getElementById('plano-colaborador-select').addEventListener('change', f
         return;
     }
     const colab = state.colaboradores.find(c => c.email === email);
-    if (colab) renderPlano(colab);
+    const avaliacao = getAvaliacaoAtual(email);
+    if (colab && avaliacao) renderPlano(colab, avaliacao);
 });
+
+// ============================================
+// SELECT EDITAR COLABORADOR → PRÉ-PREENCHER FORM
+// ============================================
+document.getElementById('editar-colaborador-select').addEventListener('change', preencherFormularioEdicao);
+
+function preencherFormularioEdicao() {
+    const email = document.getElementById('editar-colaborador-select').value;
+
+    if (!email) {
+        // Limpar formulário para novo colaborador
+        document.getElementById('input-nome').value = '';
+        document.getElementById('input-email').value = '';
+        document.getElementById('input-email').disabled = false;
+        document.getElementById('input-area').value = 'SRE';
+        HARD_SKILLS.forEach((_, i) => { document.getElementById(`hard_${i}`).value = 3; });
+        SOFT_SKILLS.forEach((_, i) => { document.getElementById(`soft_${i}`).value = 3; });
+        return;
+    }
+
+    const colab = state.colaboradores.find(c => c.email === email);
+    if (!colab) return;
+
+    // Preencher dados básicos
+    document.getElementById('input-nome').value = colab.nome;
+    document.getElementById('input-email').value = colab.email;
+    document.getElementById('input-email').disabled = true; // Não editar email
+    document.getElementById('input-area').value = colab.area;
+
+    // Preencher notas do quarter atual (se existirem)
+    const avaliacao = getAvaliacaoAtual(email);
+    if (avaliacao) {
+        avaliacao.hard.forEach((val, i) => { document.getElementById(`hard_${i}`).value = val; });
+        avaliacao.soft.forEach((val, i) => { document.getElementById(`soft_${i}`).value = val; });
+    } else {
+        // Sem avaliação nesse quarter, valores padrão
+        HARD_SKILLS.forEach((_, i) => { document.getElementById(`hard_${i}`).value = 1; });
+        SOFT_SKILLS.forEach((_, i) => { document.getElementById(`soft_${i}`).value = 1; });
+    }
+}
 
 // ============================================
 // RENDERIZAR RESUMO
 // ============================================
-function renderResumo(colab) {
-    const medHard = calcMediana(colab.hard);
-    const medSoft = calcMediana(colab.soft);
+function renderResumo(colab, avaliacao) {
+    const medHard = calcMediana(avaliacao.hard);
+    const medSoft = calcMediana(avaliacao.soft);
 
-    let hardBars = colab.hard.map((val, i) => `
+    let hardBars = avaliacao.hard.map((val, i) => `
         <div class="skill-bar-container">
             <span class="skill-bar-label">${HARD_SKILLS[i]}</span>
             <div class="skill-bar">
@@ -237,7 +366,7 @@ function renderResumo(colab) {
         </div>
     `).join('');
 
-    let softBars = colab.soft.map((val, i) => `
+    let softBars = avaliacao.soft.map((val, i) => `
         <div class="skill-bar-container">
             <span class="skill-bar-label">${SOFT_SKILLS[i]}</span>
             <div class="skill-bar">
@@ -254,7 +383,7 @@ function renderResumo(colab) {
         <div class="resumo-header">
             <div>
                 <h3>${colab.nome}</h3>
-                <small>${colab.email}</small>
+                <small>${colab.email} | Período: ${state.currentQuarter}</small>
             </div>
             <div style="display:flex;gap:0.5rem;align-items:center;">
                 <span class="area-badge">${colab.area}</span>
@@ -310,8 +439,9 @@ function buildSkillInputs() {
 document.getElementById('form-colaborador').addEventListener('submit', async function (e) {
     e.preventDefault();
 
+    const editandoEmail = document.getElementById('editar-colaborador-select').value;
     const nome = document.getElementById('input-nome').value.trim();
-    const email = document.getElementById('input-email').value.trim();
+    const email = editandoEmail || document.getElementById('input-email').value.trim();
     const area = document.getElementById('input-area').value;
 
     const hard = HARD_SKILLS.map((_, i) => {
@@ -325,6 +455,10 @@ document.getElementById('form-colaborador').addEventListener('submit', async fun
     });
 
     await salvarColaborador({ nome, email, area, hard, soft, quarter: state.currentQuarter });
+
+    // Reset
+    document.getElementById('editar-colaborador-select').value = '';
+    document.getElementById('input-email').disabled = false;
     this.reset();
     buildSkillInputs();
 });
@@ -333,4 +467,4 @@ document.getElementById('form-colaborador').addEventListener('submit', async fun
 // INIT
 // ============================================
 buildSkillInputs();
-carregarColaboradores();
+carregarDados();

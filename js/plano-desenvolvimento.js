@@ -2,13 +2,13 @@
 // PLANO DE DESENVOLVIMENTO
 // ============================================
 
-function gerarSugestoes(colab) {
+function gerarSugestoes(colab, avaliacao) {
     const sugestoes = [];
 
-    if (!colab.hard || !colab.soft) return sugestoes;
+    if (!avaliacao || !avaliacao.hard || !avaliacao.soft) return sugestoes;
 
     // Identificar Hard Skills com nota ≤ 2 (maiores gaps)
-    colab.hard.forEach((val, i) => {
+    avaliacao.hard.forEach((val, i) => {
         if (val <= 2) {
             sugestoes.push({
                 tipo: 'hard',
@@ -24,7 +24,7 @@ function gerarSugestoes(colab) {
     });
 
     // Identificar Soft Skills com nota ≤ 2
-    colab.soft.forEach((val, i) => {
+    avaliacao.soft.forEach((val, i) => {
         if (val <= 2) {
             sugestoes.push({
                 tipo: 'soft',
@@ -41,12 +41,11 @@ function gerarSugestoes(colab) {
 
     // Se não há gaps críticos, sugerir evolução das medianas
     if (sugestoes.length === 0) {
-        const medHard = calcMediana(colab.hard);
-        const medSoft = calcMediana(colab.soft);
+        const medHard = calcMediana(avaliacao.hard);
+        const medSoft = calcMediana(avaliacao.soft);
 
         if (medHard < 4) {
-            // Top 3 skills mais baixas
-            const indexadas = colab.hard.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v);
+            const indexadas = avaliacao.hard.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v);
             indexadas.slice(0, 3).forEach(item => {
                 if (item.v < 4) {
                     sugestoes.push({
@@ -64,7 +63,7 @@ function gerarSugestoes(colab) {
         }
 
         if (medSoft < 4) {
-            const indexadas = colab.soft.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v);
+            const indexadas = avaliacao.soft.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v);
             indexadas.slice(0, 2).forEach(item => {
                 if (item.v < 4) {
                     sugestoes.push({
@@ -135,138 +134,33 @@ function gerarDescricaoSoft(skill, nivelAtual) {
 
 function gerarPrazo() {
     const hoje = new Date();
-    const prazo = new Date(hoje.getTime() + 90 * 24 * 60 * 60 * 1000); // 90 dias
+    const prazo = new Date(hoje.getTime() + 90 * 24 * 60 * 60 * 1000);
     return prazo.toISOString().split('T')[0];
 }
 
 // ============================================
 // RENDERIZAR PLANO
 // ============================================
-function renderPlano(colab) {
-    const sugestoes = gerarSugestoes(colab);
+function renderPlano(colab, avaliacao) {
     const container = document.getElementById('plano-conteudo');
 
-    if (!colab.hard || !colab.soft) {
-        container.innerHTML = '<p style="color:#666;">Este colaborador ainda não foi avaliado.</p>';
+    if (!avaliacao || !avaliacao.hard || !avaliacao.soft) {
+        container.innerHTML = '<p style="color:#666;">Este colaborador não foi avaliado neste período.</p>';
         return;
     }
 
-    const medHard = calcMediana(colab.hard);
-    const medSoft = calcMediana(colab.soft);
-    const { row, col } = getNineBoxPos(medHard, medSoft);
-    const nineBoxLabel = getNineBoxLabel(row, col);
-
-    let metasHTML = sugestoes.map((s, i) => `
-        <div class="meta-card" data-index="${i}">
-            <div class="meta-header">
-                <span class="status-badge ${s.status}">${formatStatus(s.status)}</span>
-                <button class="btn-danger" onclick="removerMeta(${i})">Remover</button>
-            </div>
-            <label>Meta</label>
-            <input type="text" value="${escapeHTML(s.meta)}" data-field="meta" data-index="${i}" onchange="atualizarMeta(this)">
-            <label>Descrição / Ações</label>
-            <textarea data-field="descricao" data-index="${i}" onchange="atualizarMeta(this)">${escapeHTML(s.descricao)}</textarea>
-            <div class="meta-row">
-                <div>
-                    <label>Prazo</label>
-                    <input type="date" value="${s.prazo}" data-field="prazo" data-index="${i}" onchange="atualizarMeta(this)">
-                </div>
-                <div>
-                    <label>Responsável</label>
-                    <input type="text" value="${escapeHTML(s.responsavel)}" data-field="responsavel" data-index="${i}" onchange="atualizarMeta(this)">
-                </div>
-                <div>
-                    <label>Status</label>
-                    <select data-field="status" data-index="${i}" onchange="atualizarMeta(this)">
-                        <option value="pendente" ${s.status === 'pendente' ? 'selected' : ''}>Pendente</option>
-                        <option value="em-andamento" ${s.status === 'em-andamento' ? 'selected' : ''}>Em andamento</option>
-                        <option value="concluido" ${s.status === 'concluido' ? 'selected' : ''}>Concluído</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    `).join('');
-
-    container.innerHTML = `
-        <div class="resumo-header">
-            <div>
-                <h3>${colab.nome}</h3>
-                <small>Período: ${state.currentQuarter} | Quadrante: ${nineBoxLabel}</small>
-            </div>
-            <div class="mediana-box">
-                <span>Desempenho: <strong>${medHard}</strong></span>
-                <span>Potencial: <strong>${medSoft}</strong></span>
-            </div>
-        </div>
-        <div class="sugestoes-header">
-            <h3>Metas de Desenvolvimento (${sugestoes.length})</h3>
-            <div style="display:flex;gap:0.5rem;">
-                <button class="btn-secondary" onclick="adicionarMeta()">+ Adicionar Meta</button>
-                <button class="btn-primary" onclick="salvarPlano('${colab.email}')" style="margin:0;padding:0.5rem 1rem;">Salvar Plano</button>
-            </div>
-        </div>
-        <div id="metas-container">
-            ${metasHTML || '<p style="color:#666;">Nenhuma sugestão gerada. Este colaborador tem excelentes notas!</p>'}
-        </div>
-    `;
-
-    // Salvar sugestões no state temporário
-    window._planoAtual = sugestoes;
-}
-
-function escapeHTML(str) {
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-function formatStatus(status) {
-    const map = { 'pendente': 'Pendente', 'em-andamento': 'Em andamento', 'concluido': 'Concluído' };
-    return map[status] || status;
-}
-
-function atualizarMeta(el) {
-    const index = parseInt(el.dataset.index);
-    const field = el.dataset.field;
-    if (window._planoAtual && window._planoAtual[index]) {
-        window._planoAtual[index][field] = el.value;
-    }
-}
-
-function removerMeta(index) {
-    if (window._planoAtual) {
-        window._planoAtual.splice(index, 1);
-        // Re-render
-        const email = document.getElementById('plano-colaborador-select').value;
-        const colab = state.colaboradores.find(c => c.email === email);
-        if (colab) {
-            renderPlanoComDados(colab, window._planoAtual);
-        }
-    }
-}
-
-function adicionarMeta() {
-    if (!window._planoAtual) window._planoAtual = [];
-    window._planoAtual.push({
-        tipo: 'custom',
-        skill: '',
-        nivelAtual: 0,
-        meta: 'Nova meta',
-        descricao: 'Descreva as ações necessárias.',
-        prazo: gerarPrazo(),
-        responsavel: '',
-        status: 'pendente'
+    // Tentar carregar plano existente do Firebase
+    carregarPlano(colab.email).then(metasSalvas => {
+        const sugestoes = metasSalvas || gerarSugestoes(colab, avaliacao);
+        window._planoAtual = sugestoes;
+        renderPlanoComDados(colab, avaliacao, sugestoes);
     });
-
-    const email = document.getElementById('plano-colaborador-select').value;
-    const colab = state.colaboradores.find(c => c.email === email);
-    if (colab) {
-        renderPlanoComDados(colab, window._planoAtual);
-    }
 }
 
-function renderPlanoComDados(colab, metas) {
+function renderPlanoComDados(colab, avaliacao, metas) {
     const container = document.getElementById('plano-conteudo');
-    const medHard = calcMediana(colab.hard);
-    const medSoft = calcMediana(colab.soft);
+    const medHard = calcMediana(avaliacao.hard);
+    const medSoft = calcMediana(avaliacao.soft);
     const { row, col } = getNineBoxPos(medHard, medSoft);
     const nineBoxLabel = getNineBoxLabel(row, col);
 
@@ -320,9 +214,60 @@ function renderPlanoComDados(colab, metas) {
             </div>
         </div>
         <div id="metas-container">
-            ${metasHTML || '<p style="color:#666;">Nenhuma meta definida.</p>'}
+            ${metasHTML || '<p style="color:#666;">Nenhuma sugestão gerada. Este colaborador tem excelentes notas!</p>'}
         </div>
     `;
+}
+
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function formatStatus(status) {
+    const map = { 'pendente': 'Pendente', 'em-andamento': 'Em andamento', 'concluido': 'Concluído' };
+    return map[status] || status;
+}
+
+function atualizarMeta(el) {
+    const index = parseInt(el.dataset.index);
+    const field = el.dataset.field;
+    if (window._planoAtual && window._planoAtual[index]) {
+        window._planoAtual[index][field] = el.value;
+    }
+}
+
+function removerMeta(index) {
+    if (window._planoAtual) {
+        window._planoAtual.splice(index, 1);
+        const email = document.getElementById('plano-colaborador-select').value;
+        const colab = state.colaboradores.find(c => c.email === email);
+        const avaliacao = getAvaliacaoAtual(email);
+        if (colab && avaliacao) {
+            renderPlanoComDados(colab, avaliacao, window._planoAtual);
+        }
+    }
+}
+
+function adicionarMeta() {
+    if (!window._planoAtual) window._planoAtual = [];
+    window._planoAtual.push({
+        tipo: 'custom',
+        skill: '',
+        nivelAtual: 0,
+        meta: 'Nova meta',
+        descricao: 'Descreva as ações necessárias.',
+        prazo: gerarPrazo(),
+        responsavel: '',
+        status: 'pendente'
+    });
+
+    const email = document.getElementById('plano-colaborador-select').value;
+    const colab = state.colaboradores.find(c => c.email === email);
+    const avaliacao = getAvaliacaoAtual(email);
+    if (colab && avaliacao) {
+        renderPlanoComDados(colab, avaliacao, window._planoAtual);
+    }
 }
 
 // ============================================
@@ -339,7 +284,7 @@ async function salvarPlano(email) {
     };
 
     try {
-        const docId = `${email}_${state.currentQuarter}`;
+        const docId = `${email.replace(/[^a-zA-Z0-9]/g, '_')}_${state.currentQuarter}`;
         await db.collection("planos").doc(docId).set(planoData);
         showToast("Plano salvo com sucesso!", "success");
     } catch (err) {
@@ -351,7 +296,7 @@ async function salvarPlano(email) {
 // Carregar plano existente
 async function carregarPlano(email) {
     try {
-        const docId = `${email}_${state.currentQuarter}`;
+        const docId = `${email.replace(/[^a-zA-Z0-9]/g, '_')}_${state.currentQuarter}`;
         const doc = await db.collection("planos").doc(docId).get();
         if (doc.exists) {
             return doc.data().metas;

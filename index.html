@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação de Colaboradores - CloudDog</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Avaliação de Colaboradores</h1>
+            <div class="quarter-selector">
+                <label for="quarter-select">Período:</label>
+                <select id="quarter-select">
+                    <option value="Q1-2025">Q1 2025</option>
+                    <option value="Q2-2025">Q2 2025</option>
+                    <option value="Q3-2025">Q3 2025</option>
+                    <option value="Q4-2025">Q4 2025</option>
+                    <option value="Q1-2026">Q1 2026</option>
+                    <option value="Q2-2026" selected>Q2 2026</option>
+                    <option value="Q3-2026">Q3 2026</option>
+                    <option value="Q4-2026">Q4 2026</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <button class="nav-btn active" data-section="ninebox">Nine Box</button>
+        <button class="nav-btn" data-section="resumos">Resumo Individual</button>
+        <button class="nav-btn" data-section="cadastro">Cadastrar Colaborador</button>
+        <button class="nav-btn" data-section="plano">Plano de Desenvolvimento</button>
+    </nav>
+
+    <main>
+        <!-- NINE BOX -->
+        <section id="ninebox" class="section active">
+            <h2>Nine Box - Potencial x Desempenho</h2>
+            <div class="ninebox-legend">
+                <span><strong>Eixo X (Desempenho):</strong> Mediana das Hard Skills</span>
+                <span><strong>Eixo Y (Potencial):</strong> Mediana das Soft Skills</span>
+            </div>
+            <div class="ninebox-container">
+                <div class="ninebox-grid" id="ninebox-grid">
+                    <div class="axis-label y-axis">Potencial</div>
+                    <div class="axis-label x-axis">Desempenho</div>
+                    <div class="nine-cell" data-row="3" data-col="1">
+                        <span class="cell-label">Enigma</span>
+                        <div class="cell-people"></div>
+                    </div>
+                    <div class="nine-cell" data-row="3" data-col="2">
+                        <span class="cell-label">Forte Potencial</span>
+                        <div class="cell-people"></div>
+                    </div>
+                    <div class="nine-cell star" data-row="3" data-col="3">
+                        <span class="cell-label">Estrela</span>
+                        <div class="cell-people"></div>
+                    </div>
+                    <div class="nine-cell" data-row="2" data-col="1">
+                        <span class="cell-label">Questionável</span>
+                        <div class="cell-people"></div>
+                    </div>
+                    <div class="nine-cell" data-row="2" data-col="2">
+                        <span class="cell-label">Mantenedor</span>
+                        <div class="cell-people"></div>
+                    </div>
+                    <div class="nine-cell" data-row="2" data-col="3">
+                        <span class="cell-label">Forte Desempenho</span>
+                        <div class="cell-people"></div>
+                    </div>
+                    <div class="nine-cell" data-row="1" data-col="1">
+                        <span class="cell-label">Insuficiente</span>
+                        <div class="cell-people"></div>
+                    </div>
+                    <div class="nine-cell" data-row="1" data-col="2">
+                        <span class="cell-label">Eficaz</span>
+                        <div class="cell-people"></div>
+                    </div>
+                    <div class="nine-cell" data-row="1" data-col="3">
+                        <span class="cell-label">Comprometido</span>
+                        <div class="cell-people"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESUMOS INDIVIDUAIS -->
+        <section id="resumos" class="section">
+            <h2>Resumo Individual</h2>
+            <div class="filter-bar">
+                <select id="colaborador-select">
+                    <option value="">Selecione um colaborador</option>
+                </select>
+            </div>
+            <div id="resumo-detalhe" class="resumo-detalhe"></div>
+        </section>
+
+        <!-- CADASTRO -->
+        <section id="cadastro" class="section">
+            <h2>Cadastrar / Avaliar Colaborador</h2>
+            <form id="form-colaborador">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="input-nome">Nome completo</label>
+                        <input type="text" id="input-nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-email">Email</label>
+                        <input type="email" id="input-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-area">Área</label>
+                        <select id="input-area" required>
+                            <option value="SRE">SRE</option>
+                            <option value="DEVOPS">DEVOPS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3>Hard Skills <small>(1=Sem conhecimento, 2=Baixo, 3=Bom, 4=Ótimo, 5=Especialista)</small></h3>
+                <div class="skills-grid" id="hardskills-inputs"></div>
+
+                <h3>Soft Skills <small>(1=Muito baixo, 2=Baixo, 3=Médio, 4=Alto, 5=Muito alto)</small></h3>
+                <div class="skills-grid" id="softskills-inputs"></div>
+
+                <button type="submit" class="btn-primary">Salvar Avaliação</button>
+            </form>
+        </section>
+
+        <!-- PLANO DE DESENVOLVIMENTO -->
+        <section id="plano" class="section">
+            <h2>Plano de Desenvolvimento</h2>
+            <div class="filter-bar">
+                <select id="plano-colaborador-select">
+                    <option value="">Selecione um colaborador</option>
+                </select>
+            </div>
+            <div id="plano-conteudo" class="plano-conteudo"></div>
+        </section>
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/ninebox.js"></script>
+    <script src="js/plano-desenvolvimento.js"></script>
+</body>
+</html>

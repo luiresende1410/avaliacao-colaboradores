@@ -28,40 +28,50 @@ const HARD_SKILLS = [
 ];
 
 const SOFT_SKILLS = [
-    "Obsessão pelo Cliente",
-    "Propriedade",
-    "Inventar e Simplificar",
-    "Estar Certo, Muitas Vezes",
-    "Aprender e Ser Curioso",
-    "Insistir nos Padrões Mais Altos",
-    "Pensar Grande",
-    "Viés para a Ação",
-    "Frugalidade",
-    "Ganhar Confiança",
-    "Mergulhar Profundamente",
-    "Ter Firmeza; Discordar e Comprometer-se",
-    "Entregar Resultados"
+    "Foco no Cliente",
+    "Senso de Dono",
+    "Inovação e Simplificação",
+    "Tomada de Decisão",
+    "Aprendizado Contínuo",
+    "Excelência e Qualidade",
+    "Visão Estratégica",
+    "Proatividade",
+    "Gestão de Recursos",
+    "Confiabilidade e Transparência",
+    "Capacidade Analítica",
+    "Assertividade e Colaboração",
+    "Orientação a Resultados"
+];
+
+const DISCIPLINAR = [
+    "Pontualidade",
+    "Assiduidade",
+    "Postura Profissional",
+    "Cumprimento de Prazos",
+    "Comunicação",
+    "Trabalho em Equipe",
+    "Respeito às Normas"
 ];
 
 // Dados da planilha original (serão migrados como Q2-2026)
 const DADOS_PLANILHA = [
-    { nome: "André Novaes", email: "andre.novaes@clouddog.com.br", area: "DEVOPS", hard: [3,2,3,2,3,4,2,2,1,3,2,1,1,1,1,1,1,1,1,1,1,1,2], soft: [4,3,2,4,3,4,3,4,3,3,4,2,4] },
-    { nome: "Bruno Loschi", email: "bruno.loschi@clouddog.com.br", area: "SRE", hard: [3,3,3,1,3,3,3,3,2,3,3,3,1,1,2,1,1,2,1,1,3,1,3], soft: [4,4,3,3,3,3,3,2,3,3,3,3,3] },
-    { nome: "Felipe Vieira", email: "felipe.vieira@clouddog.com.br", area: "SRE", hard: [3,3,1,1,1,3,1,1,1,2,2,3,1,1,2,1,1,1,1,1,3,1,3], soft: [5,4,4,2,4,3,4,2,3,2,3,3,4] },
-    { nome: "Gabriel Abramo", email: "gabriel.abramo@clouddog.com.br", area: "SRE", hard: [5,5,3,5,4,5,1,1,1,4,5,4,3,3,4,1,1,3,1,1,4,2,5], soft: [4,3,5,4,5,4,4,2,4,3,3,4,4] },
-    { nome: "Guilherme Santos", email: "guilherme.santos@clouddog.com.br", area: "SRE", hard: [5,5,3,4,4,4,1,1,1,4,4,4,1,1,3,1,1,3,1,1,4,2,5], soft: [4,4,4,3,3,3,4,3,3,3,4,3,4] },
-    { nome: "Gustavo Kowalski", email: "gustavo.kowalski@clouddog.com.br", area: "DEVOPS", hard: null, soft: null },
-    { nome: "Gustavo Silva", email: "gustavo.silva@clouddog.com.br", area: "DEVOPS", hard: null, soft: null },
-    { nome: "Iago Faria", email: "iago.faria@clouddog.com.br", area: "SRE", hard: [3,3,1,3,2,3,1,1,1,3,3,3,1,1,3,2,1,2,1,1,3,1,4], soft: [5,4,2,3,3,4,3,3,3,3,3,3,4] },
-    { nome: "Jefferson Silva", email: "jefferson.silva@clouddog.com.br", area: "DEVOPS", hard: [4,4,4,5,5,5,4,4,4,5,5,5,5,5,4,2,2,3,3,3,4,3,5], soft: [5,5,5,5,5,5,5,4,5,5,5,5,5] },
-    { nome: "João Felipe Bertini", email: "joao.bertini@clouddog.com.br", area: "DEVOPS", hard: null, soft: null },
-    { nome: "Kayke Peres", email: "kayke.peres@clouddog.com.br", area: "DEVOPS", hard: null, soft: null },
-    { nome: "Kayky Stiliano", email: "kayky.stiliano@clouddog.com.br", area: "DEVOPS", hard: null, soft: null },
-    { nome: "Leonardo Miranda", email: "leonardo.miranda@clouddog.com.br", area: "SRE", hard: [5,5,3,4,3,5,3,3,3,3,4,5,3,3,5,2,2,4,1,1,4,3,5], soft: [3,3,5,3,4,4,4,3,4,4,4,3,4] },
-    { nome: "Lucas Ortiz", email: "lucas.ortiz@clouddog.com.br", area: "SRE", hard: [5,4,2,3,4,4,1,1,1,4,3,4,1,1,3,4,1,2,1,1,4,2,5], soft: [4,4,4,4,4,5,4,4,4,3,4,5,5] },
-    { nome: "Lucas Torino", email: "lucas.torino@clouddog.com.br", area: "SRE", hard: null, soft: null },
-    { nome: "Vinicius Rodrigues", email: "vinicius.rodrigues@clouddog.com.br", area: "SRE", hard: null, soft: null },
-    { nome: "Vitor Santana", email: "vitor.santana@clouddog.com.br", area: "SRE", hard: null, soft: null }
+    { nome: "André Novaes", email: "andre.novaes@clouddog.com.br", area: "DEVOPS", hard: [3,2,3,2,3,4,2,2,1,3,2,1,1,1,1,1,1,1,1,1,1,1,2], soft: [4,3,2,4,3,4,3,4,3,3,4,2,4], disciplinar: [4,4,4,3,3,4,4] },
+    { nome: "Bruno Loschi", email: "bruno.loschi@clouddog.com.br", area: "SRE", hard: [3,3,3,1,3,3,3,3,2,3,3,3,1,1,2,1,1,2,1,1,3,1,3], soft: [4,4,3,3,3,3,3,2,3,3,3,3,3], disciplinar: [4,4,4,4,3,4,4] },
+    { nome: "Felipe Vieira", email: "felipe.vieira@clouddog.com.br", area: "SRE", hard: [3,3,1,1,1,3,1,1,1,2,2,3,1,1,2,1,1,1,1,1,3,1,3], soft: [5,4,4,2,4,3,4,2,3,2,3,3,4], disciplinar: [5,5,4,4,3,4,5] },
+    { nome: "Gabriel Abramo", email: "gabriel.abramo@clouddog.com.br", area: "SRE", hard: [5,5,3,5,4,5,1,1,1,4,5,4,3,3,4,1,1,3,1,1,4,2,5], soft: [4,3,5,4,5,4,4,2,4,3,3,4,4], disciplinar: [4,4,5,5,4,4,5] },
+    { nome: "Guilherme Santos", email: "guilherme.santos@clouddog.com.br", area: "SRE", hard: [5,5,3,4,4,4,1,1,1,4,4,4,1,1,3,1,1,3,1,1,4,2,5], soft: [4,4,4,3,3,3,4,3,3,3,4,3,4], disciplinar: [4,4,4,4,4,4,4] },
+    { nome: "Gustavo Kowalski", email: "gustavo.kowalski@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
+    { nome: "Gustavo Silva", email: "gustavo.silva@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
+    { nome: "Iago Faria", email: "iago.faria@clouddog.com.br", area: "SRE", hard: [3,3,1,3,2,3,1,1,1,3,3,3,1,1,3,2,1,2,1,1,3,1,4], soft: [5,4,2,3,3,4,3,3,3,3,3,3,4], disciplinar: [5,5,4,4,4,5,5] },
+    { nome: "Jefferson Silva", email: "jefferson.silva@clouddog.com.br", area: "DEVOPS", hard: [4,4,4,5,5,5,4,4,4,5,5,5,5,5,4,2,2,3,3,3,4,3,5], soft: [5,5,5,5,5,5,5,4,5,5,5,5,5], disciplinar: [5,5,5,5,5,5,5] },
+    { nome: "João Felipe Bertini", email: "joao.bertini@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
+    { nome: "Kayke Peres", email: "kayke.peres@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
+    { nome: "Kayky Stiliano", email: "kayky.stiliano@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
+    { nome: "Leonardo Miranda", email: "leonardo.miranda@clouddog.com.br", area: "SRE", hard: [5,5,3,4,3,5,3,3,3,3,4,5,3,3,5,2,2,4,1,1,4,3,5], soft: [3,3,5,3,4,4,4,3,4,4,4,3,4], disciplinar: [4,4,5,4,4,4,4] },
+    { nome: "Lucas Ortiz", email: "lucas.ortiz@clouddog.com.br", area: "SRE", hard: [5,4,2,3,4,4,1,1,1,4,3,4,1,1,3,4,1,2,1,1,4,2,5], soft: [4,4,4,4,4,5,4,4,4,3,4,5,5], disciplinar: [5,5,5,5,4,5,5] },
+    { nome: "Lucas Torino", email: "lucas.torino@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null },
+    { nome: "Vinicius Rodrigues", email: "vinicius.rodrigues@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null },
+    { nome: "Vitor Santana", email: "vitor.santana@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null }
 ];
 
 // Estado global da aplicação
@@ -86,6 +96,9 @@ function calcMediana(arr) {
 function getLevelLabel(val, type) {
     if (type === 'hard') {
         const labels = { 1: 'Sem conhecimento', 2: 'Baixo', 3: 'Bom', 4: 'Ótimo', 5: 'Especialista' };
+        return labels[val] || '-';
+    } else if (type === 'disciplinar') {
+        const labels = { 1: 'Crítico', 2: 'Abaixo do esperado', 3: 'Adequado', 4: 'Bom', 5: 'Exemplar' };
         return labels[val] || '-';
     } else {
         const labels = { 1: 'Muito baixo', 2: 'Baixo', 3: 'Médio', 4: 'Alto', 5: 'Muito alto' };
@@ -151,7 +164,8 @@ async function carregarDados() {
                         email: p.email,
                         quarter: "Q2-2026",
                         hard: p.hard,
-                        soft: p.soft
+                        soft: p.soft,
+                        disciplinar: p.disciplinar || null
                     });
                 }
             }
@@ -168,7 +182,8 @@ async function carregarDados() {
             email: p.email,
             quarter: "Q2-2026",
             hard: p.hard,
-            soft: p.soft
+            soft: p.soft,
+            disciplinar: p.disciplinar || null
         }));
     }
 
@@ -178,7 +193,7 @@ async function carregarDados() {
 }
 
 async function salvarColaborador(dados) {
-    const { nome, email, area, hard, soft, quarter } = dados;
+    const { nome, email, area, hard, soft, disciplinar, quarter } = dados;
 
     try {
         // Salvar/atualizar perfil
@@ -198,7 +213,7 @@ async function salvarColaborador(dados) {
 
         // Salvar/atualizar avaliação do quarter
         const avalDocId = `${email.replace(/[^a-zA-Z0-9]/g, '_')}_${quarter}`;
-        const avalData = { email, quarter, hard, soft };
+        const avalData = { email, quarter, hard, soft, disciplinar };
         await db.collection("avaliacoes").doc(avalDocId).set(avalData);
 
         const avalExistente = state.avaliacoes.find(a => a.email === email && a.quarter === quarter);
@@ -220,9 +235,9 @@ async function salvarColaborador(dados) {
 
         const avalExistente = state.avaliacoes.find(a => a.email === email && a.quarter === quarter);
         if (avalExistente) {
-            Object.assign(avalExistente, { hard, soft });
+            Object.assign(avalExistente, { hard, soft, disciplinar });
         } else {
-            state.avaliacoes.push({ id: Date.now().toString(), email, quarter, hard, soft });
+            state.avaliacoes.push({ id: Date.now().toString(), email, quarter, hard, soft, disciplinar });
         }
 
         showToast("Salvo localmente (Firebase não configurado)", "success");
@@ -325,6 +340,7 @@ function preencherFormularioEdicao() {
         document.getElementById('input-area').value = 'SRE';
         HARD_SKILLS.forEach((_, i) => { document.getElementById(`hard_${i}`).value = 3; });
         SOFT_SKILLS.forEach((_, i) => { document.getElementById(`soft_${i}`).value = 3; });
+        DISCIPLINAR.forEach((_, i) => { document.getElementById(`disc_${i}`).value = 3; });
         return;
     }
 
@@ -342,10 +358,16 @@ function preencherFormularioEdicao() {
     if (avaliacao) {
         avaliacao.hard.forEach((val, i) => { document.getElementById(`hard_${i}`).value = val; });
         avaliacao.soft.forEach((val, i) => { document.getElementById(`soft_${i}`).value = val; });
+        if (avaliacao.disciplinar) {
+            avaliacao.disciplinar.forEach((val, i) => { document.getElementById(`disc_${i}`).value = val; });
+        } else {
+            DISCIPLINAR.forEach((_, i) => { document.getElementById(`disc_${i}`).value = 3; });
+        }
     } else {
         // Sem avaliação nesse quarter, valores padrão
         HARD_SKILLS.forEach((_, i) => { document.getElementById(`hard_${i}`).value = 1; });
         SOFT_SKILLS.forEach((_, i) => { document.getElementById(`soft_${i}`).value = 1; });
+        DISCIPLINAR.forEach((_, i) => { document.getElementById(`disc_${i}`).value = 1; });
     }
 }
 
@@ -355,6 +377,7 @@ function preencherFormularioEdicao() {
 function renderResumo(colab, avaliacao) {
     const medHard = calcMediana(avaliacao.hard);
     const medSoft = calcMediana(avaliacao.soft);
+    const medDisc = avaliacao.disciplinar ? calcMediana(avaliacao.disciplinar) : null;
 
     let hardBars = avaliacao.hard.map((val, i) => `
         <div class="skill-bar-container">
@@ -376,6 +399,19 @@ function renderResumo(colab, avaliacao) {
         </div>
     `).join('');
 
+    let discBars = '';
+    if (avaliacao.disciplinar) {
+        discBars = avaliacao.disciplinar.map((val, i) => `
+            <div class="skill-bar-container">
+                <span class="skill-bar-label">${DISCIPLINAR[i]}</span>
+                <div class="skill-bar">
+                    <div class="skill-bar-fill level-${val}"></div>
+                </div>
+                <span class="skill-bar-value">${val}</span>
+            </div>
+        `).join('');
+    }
+
     const { row, col } = getNineBoxPos(medHard, medSoft);
     const nineBoxLabel = getNineBoxLabel(row, col);
 
@@ -391,9 +427,27 @@ function renderResumo(colab, avaliacao) {
             </div>
         </div>
         <div class="mediana-box" style="margin-bottom:1.5rem;">
-            <span>Desempenho (Hard Skills): <strong>${medHard}</strong></span>
-            <span>Potencial (Soft Skills): <strong>${medSoft}</strong></span>
+            <span>Desempenho (Hard): <strong>${medHard}</strong></span>
+            <span>Potencial (Soft): <strong>${medSoft}</strong></span>
+            ${medDisc !== null ? `<span>Disciplinar: <strong>${medDisc}</strong></span>` : ''}
         </div>
+
+        <div class="radar-charts-container">
+            <div class="radar-chart-wrapper">
+                <h4>Radar - Hard Skills</h4>
+                <canvas id="radar-hard" width="400" height="400"></canvas>
+            </div>
+            <div class="radar-chart-wrapper">
+                <h4>Radar - Soft Skills</h4>
+                <canvas id="radar-soft" width="400" height="400"></canvas>
+            </div>
+            ${avaliacao.disciplinar ? `
+            <div class="radar-chart-wrapper">
+                <h4>Radar - Disciplinar</h4>
+                <canvas id="radar-disc" width="400" height="400"></canvas>
+            </div>` : ''}
+        </div>
+
         <div class="skills-section">
             <h4>Hard Skills</h4>
             ${hardBars}
@@ -402,7 +456,15 @@ function renderResumo(colab, avaliacao) {
             <h4>Soft Skills</h4>
             ${softBars}
         </div>
+        ${avaliacao.disciplinar ? `
+        <div class="skills-section">
+            <h4>Avaliação Disciplinar</h4>
+            ${discBars}
+        </div>` : ''}
     `;
+
+    // Renderizar gráficos radar
+    renderRadarCharts(avaliacao);
 }
 
 function getNineBoxLabel(row, col) {
@@ -415,11 +477,113 @@ function getNineBoxLabel(row, col) {
 }
 
 // ============================================
+// GRÁFICOS RADAR (Chart.js)
+// ============================================
+function renderRadarCharts(avaliacao) {
+    // Destruir gráficos anteriores se existirem
+    if (window._radarHard) window._radarHard.destroy();
+    if (window._radarSoft) window._radarSoft.destroy();
+    if (window._radarDisc) window._radarDisc.destroy();
+
+    const radarOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            r: {
+                beginAtZero: true,
+                min: 0,
+                max: 5,
+                ticks: {
+                    stepSize: 1,
+                    font: { size: 10 }
+                },
+                pointLabels: {
+                    font: { size: 9 },
+                    callback: function(label) {
+                        // Truncar labels longos
+                        return label.length > 20 ? label.substring(0, 18) + '...' : label;
+                    }
+                }
+            }
+        },
+        plugins: {
+            legend: { display: false }
+        }
+    };
+
+    // Radar Hard Skills
+    const ctxHard = document.getElementById('radar-hard');
+    if (ctxHard) {
+        window._radarHard = new Chart(ctxHard, {
+            type: 'radar',
+            data: {
+                labels: HARD_SKILLS.map(s => s.length > 25 ? s.substring(0, 23) + '...' : s),
+                datasets: [{
+                    label: 'Hard Skills',
+                    data: avaliacao.hard,
+                    backgroundColor: 'rgba(255, 153, 0, 0.2)',
+                    borderColor: '#FF9900',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#EC7211',
+                    pointRadius: 3
+                }]
+            },
+            options: radarOptions
+        });
+    }
+
+    // Radar Soft Skills
+    const ctxSoft = document.getElementById('radar-soft');
+    if (ctxSoft) {
+        window._radarSoft = new Chart(ctxSoft, {
+            type: 'radar',
+            data: {
+                labels: SOFT_SKILLS,
+                datasets: [{
+                    label: 'Soft Skills',
+                    data: avaliacao.soft,
+                    backgroundColor: 'rgba(27, 101, 157, 0.2)',
+                    borderColor: '#1B659D',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#1B659D',
+                    pointRadius: 3
+                }]
+            },
+            options: radarOptions
+        });
+    }
+
+    // Radar Disciplinar
+    if (avaliacao.disciplinar) {
+        const ctxDisc = document.getElementById('radar-disc');
+        if (ctxDisc) {
+            window._radarDisc = new Chart(ctxDisc, {
+                type: 'radar',
+                data: {
+                    labels: DISCIPLINAR,
+                    datasets: [{
+                        label: 'Disciplinar',
+                        data: avaliacao.disciplinar,
+                        backgroundColor: 'rgba(29, 129, 2, 0.2)',
+                        borderColor: '#1D8102',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#1D8102',
+                        pointRadius: 3
+                    }]
+                },
+                options: radarOptions
+            });
+        }
+    }
+}
+
+// ============================================
 // FORMULÁRIO DE CADASTRO
 // ============================================
 function buildSkillInputs() {
     const hardContainer = document.getElementById('hardskills-inputs');
     const softContainer = document.getElementById('softskills-inputs');
+    const discContainer = document.getElementById('disciplinar-inputs');
 
     hardContainer.innerHTML = HARD_SKILLS.map((skill, i) => `
         <div class="skill-input-group">
@@ -432,6 +596,13 @@ function buildSkillInputs() {
         <div class="skill-input-group">
             <label for="soft_${i}">${skill}</label>
             <input type="number" id="soft_${i}" name="soft_${i}" min="1" max="5" value="3" required>
+        </div>
+    `).join('');
+
+    discContainer.innerHTML = DISCIPLINAR.map((skill, i) => `
+        <div class="skill-input-group">
+            <label for="disc_${i}">${skill}</label>
+            <input type="number" id="disc_${i}" name="disc_${i}" min="1" max="5" value="3" required>
         </div>
     `).join('');
 }
@@ -454,7 +625,12 @@ document.getElementById('form-colaborador').addEventListener('submit', async fun
         return Math.min(5, Math.max(1, val));
     });
 
-    await salvarColaborador({ nome, email, area, hard, soft, quarter: state.currentQuarter });
+    const disciplinar = DISCIPLINAR.map((_, i) => {
+        const val = parseInt(document.getElementById(`disc_${i}`).value);
+        return Math.min(5, Math.max(1, val));
+    });
+
+    await salvarColaborador({ nome, email, area, hard, soft, disciplinar, quarter: state.currentQuarter });
 
     // Reset
     document.getElementById('editar-colaborador-select').value = '';

@@ -39,6 +39,24 @@ function gerarSugestoes(colab, avaliacao) {
         }
     });
 
+    // Identificar Disciplinar com nota ≤ 2
+    if (avaliacao.disciplinar) {
+        avaliacao.disciplinar.forEach((val, i) => {
+            if (val <= 2) {
+                sugestoes.push({
+                    tipo: 'disciplinar',
+                    skill: DISCIPLINAR[i],
+                    nivelAtual: val,
+                    meta: `Melhorar "${DISCIPLINAR[i]}" do nível ${val} para pelo menos ${Math.min(val + 2, 5)}`,
+                    descricao: gerarDescricaoDisciplinar(DISCIPLINAR[i], val),
+                    prazo: gerarPrazo(),
+                    responsavel: colab.nome,
+                    status: 'pendente'
+                });
+            }
+        });
+    }
+
     // Se não há gaps críticos, sugerir evolução das medianas
     if (sugestoes.length === 0) {
         const medHard = calcMediana(avaliacao.hard);
@@ -111,25 +129,42 @@ function gerarDescricaoMeta(skill, nivelAtual) {
 
 function gerarDescricaoSoft(skill, nivelAtual) {
     const acoes = {
-        'Obsessão pelo Cliente': 'Conduzir ao menos 2 reuniões com clientes e coletar feedback.',
-        'Propriedade': 'Assumir ownership de um projeto end-to-end no quarter.',
-        'Inventar e Simplificar': 'Propor e implementar 1 melhoria de processo documentada.',
-        'Estar Certo': 'Embasar decisões com dados. Documentar 3 decisões técnicas.',
-        'Aprender e Ser Curioso': 'Apresentar 2 tech talks ou compartilhar aprendizados com o time.',
-        'Insistir nos Padrões': 'Criar ou melhorar 2 padrões de qualidade no time.',
-        'Pensar Grande': 'Propor roadmap de 6 meses para área de atuação.',
-        'Viés para a Ação': 'Reduzir tempo médio de resposta a incidentes em 20%.',
-        'Frugalidade': 'Identificar e implementar 1 redução de custo em infraestrutura.',
-        'Ganhar Confiança': 'Pedir feedback 360 e implementar 2 pontos de melhoria.',
-        'Mergulhar Profundamente': 'Documentar deep-dive de 2 sistemas críticos.',
-        'Ter Firmeza': 'Participar ativamente de 3 design reviews com posição clara.',
-        'Entregar Resultados': 'Atingir 100% das metas do quarter anterior.'
+        'Foco no Cliente': 'Conduzir ao menos 2 reuniões com clientes e coletar feedback ativo.',
+        'Senso de Dono': 'Assumir ownership de um projeto end-to-end no quarter.',
+        'Inovação e Simplificação': 'Propor e implementar 1 melhoria de processo documentada.',
+        'Tomada de Decisão': 'Embasar decisões com dados. Documentar 3 decisões técnicas.',
+        'Aprendizado Contínuo': 'Apresentar 2 tech talks ou compartilhar aprendizados com o time.',
+        'Excelência e Qualidade': 'Criar ou melhorar 2 padrões de qualidade no time.',
+        'Visão Estratégica': 'Propor roadmap de 6 meses para área de atuação.',
+        'Proatividade': 'Reduzir tempo médio de resposta a incidentes em 20%.',
+        'Gestão de Recursos': 'Identificar e implementar 1 redução de custo em infraestrutura.',
+        'Confiabilidade e Transparência': 'Pedir feedback 360 e implementar 2 pontos de melhoria.',
+        'Capacidade Analítica': 'Documentar deep-dive de 2 sistemas críticos.',
+        'Assertividade e Colaboração': 'Participar ativamente de 3 design reviews com posição clara.',
+        'Orientação a Resultados': 'Atingir 100% das metas do quarter anterior.'
     };
 
     for (const [key, acao] of Object.entries(acoes)) {
         if (skill.includes(key)) return acao;
     }
     return `Desenvolver ${skill} com feedback constante e prática deliberada.`;
+}
+
+function gerarDescricaoDisciplinar(skill, nivelAtual) {
+    const acoes = {
+        'Pontualidade': 'Manter registro de horários e reduzir atrasos a zero no próximo mês.',
+        'Assiduidade': 'Reduzir faltas não justificadas. Comunicar ausências com antecedência.',
+        'Postura Profissional': 'Participar de workshop de comunicação profissional e aplicar no dia a dia.',
+        'Cumprimento de Prazos': 'Usar ferramenta de gestão de tarefas e entregar 100% dentro do prazo.',
+        'Comunicação': 'Praticar comunicação assertiva em reuniões e documentar decisões por escrito.',
+        'Trabalho em Equipe': 'Participar de pair programming semanal e contribuir em code reviews.',
+        'Respeito às Normas': 'Revisar e seguir políticas internas. Reportar impedimentos proativamente.'
+    };
+
+    for (const [key, acao] of Object.entries(acoes)) {
+        if (skill.includes(key)) return acao;
+    }
+    return `Melhorar ${skill} com acompanhamento semanal e feedbacks regulares.`;
 }
 
 function gerarPrazo() {

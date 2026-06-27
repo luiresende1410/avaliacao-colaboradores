@@ -423,7 +423,7 @@ function renderResumo(colab, avaliacao) {
             </div>
             <div style="display:flex;gap:0.5rem;align-items:center;">
                 <span class="area-badge">${colab.area}</span>
-                <span class="area-badge" style="background:var(--aws-dark);color:var(--aws-white);">${nineBoxLabel}</span>
+                <span class="area-badge" style="background:var(--cd-dark);color:var(--cd-white);">${nineBoxLabel}</span>
             </div>
         </div>
         <div class="mediana-box" style="margin-bottom:1.5rem;">

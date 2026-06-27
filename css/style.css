@@ -1,17 +1,19 @@
-/* === VARIABLES - AWS Theme === */
+/* === VARIABLES - CloudDog Theme === */
 :root {
-    --aws-orange: #FF9900;
-    --aws-orange-dark: #EC7211;
-    --aws-dark: #232F3E;
-    --aws-dark-secondary: #37475A;
-    --aws-light: #F2F3F3;
-    --aws-white: #FFFFFF;
-    --aws-blue: #1B659D;
-    --aws-green: #1D8102;
-    --aws-red: #D13212;
-    --aws-yellow: #F2C94C;
+    --cd-orange: #FF9900;
+    --cd-orange-dark: #E8650A;
+    --cd-dark: #2D2D2D;
+    --cd-dark-secondary: #3D3D3D;
+    --cd-gray: #4A4A4A;
+    --cd-light: #F5F5F5;
+    --cd-white: #FFFFFF;
+    --cd-blue: #1B659D;
+    --cd-green: #1D8102;
+    --cd-red: #D13212;
+    --cd-yellow: #F2C94C;
     --border-radius: 8px;
     --shadow: 0 2px 8px rgba(0,0,0,0.12);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
     --transition: all 0.2s ease;
 }
 
@@ -24,15 +26,15 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--aws-light);
-    color: var(--aws-dark);
+    background: var(--cd-light);
+    color: var(--cd-dark);
     line-height: 1.6;
 }
 
 /* === HEADER === */
 header {
-    background: var(--aws-dark);
-    color: var(--aws-white);
+    background: var(--cd-dark);
+    color: var(--cd-white);
     padding: 1rem 2rem;
     box-shadow: var(--shadow);
 }
@@ -50,6 +52,17 @@ header {
     font-weight: 600;
 }
 
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-logo {
+    height: 42px;
+    width: auto;
+}
+
 .quarter-selector label {
     margin-right: 0.5rem;
     font-size: 0.9rem;
@@ -58,16 +71,16 @@ header {
 .quarter-selector select {
     padding: 0.4rem 0.8rem;
     border-radius: var(--border-radius);
-    border: 1px solid var(--aws-orange);
-    background: var(--aws-dark-secondary);
-    color: var(--aws-white);
+    border: 1px solid var(--cd-orange);
+    background: var(--cd-dark-secondary);
+    color: var(--cd-white);
     font-size: 0.9rem;
     cursor: pointer;
 }
 
 /* === NAV === */
 nav {
-    background: var(--aws-dark-secondary);
+    background: var(--cd-dark-secondary);
     padding: 0.5rem 2rem;
     display: flex;
     gap: 0.5rem;
@@ -78,7 +91,7 @@ nav {
     padding: 0.6rem 1.2rem;
     border: none;
     background: transparent;
-    color: var(--aws-light);
+    color: var(--cd-light);
     font-size: 0.9rem;
     cursor: pointer;
     border-radius: var(--border-radius);
@@ -87,12 +100,12 @@ nav {
 
 .nav-btn:hover {
     background: rgba(255, 153, 0, 0.15);
-    color: var(--aws-orange);
+    color: var(--cd-orange);
 }
 
 .nav-btn.active {
-    background: var(--aws-orange);
-    color: var(--aws-dark);
+    background: var(--cd-orange);
+    color: var(--cd-dark);
     font-weight: 600;
 }
 
@@ -113,9 +126,9 @@ main {
 
 .section h2 {
     margin-bottom: 1rem;
-    color: var(--aws-dark);
+    color: var(--cd-dark);
     font-size: 1.4rem;
-    border-bottom: 3px solid var(--aws-orange);
+    border-bottom: 3px solid var(--cd-orange);
     padding-bottom: 0.5rem;
 }
 
@@ -125,7 +138,7 @@ main {
     gap: 2rem;
     margin-bottom: 1.5rem;
     font-size: 0.85rem;
-    color: var(--aws-dark-secondary);
+    color: var(--cd-dark-secondary);
 }
 
 .ninebox-container {
@@ -147,7 +160,7 @@ main {
 .axis-label {
     font-size: 0.75rem;
     font-weight: 700;
-    color: var(--aws-dark-secondary);
+    color: var(--cd-dark-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -166,7 +179,7 @@ main {
 }
 
 .nine-cell {
-    background: var(--aws-white);
+    background: var(--cd-white);
     border: 2px solid #ddd;
     border-radius: var(--border-radius);
     padding: 0.8rem;
@@ -177,7 +190,7 @@ main {
 }
 
 .nine-cell:hover {
-    border-color: var(--aws-orange);
+    border-color: var(--cd-orange);
     box-shadow: var(--shadow);
 }
 
@@ -200,7 +213,7 @@ main {
     font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--aws-dark-secondary);
+    color: var(--cd-dark-secondary);
     margin-bottom: 0.5rem;
 }
 
@@ -213,8 +226,8 @@ main {
 }
 
 .person-badge {
-    background: var(--aws-dark);
-    color: var(--aws-white);
+    background: var(--cd-dark);
+    color: var(--cd-white);
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 0.7rem;
@@ -223,8 +236,8 @@ main {
 }
 
 .person-badge:hover {
-    background: var(--aws-orange);
-    color: var(--aws-dark);
+    background: var(--cd-orange);
+    color: var(--cd-dark);
 }
 
 .person-badge.nao-avaliado {
@@ -246,7 +259,7 @@ main {
 }
 
 .resumo-detalhe {
-    background: var(--aws-white);
+    background: var(--cd-white);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     padding: 2rem;
@@ -258,7 +271,7 @@ main {
     align-items: center;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid var(--aws-light);
+    border-bottom: 2px solid var(--cd-light);
 }
 
 .resumo-header h3 {
@@ -266,8 +279,8 @@ main {
 }
 
 .resumo-header .area-badge {
-    background: var(--aws-orange);
-    color: var(--aws-dark);
+    background: var(--cd-orange);
+    color: var(--cd-dark);
     padding: 4px 12px;
     border-radius: 12px;
     font-size: 0.8rem;
@@ -280,7 +293,7 @@ main {
 
 .skills-section h4 {
     margin-bottom: 0.8rem;
-    color: var(--aws-dark-secondary);
+    color: var(--cd-dark-secondary);
     font-size: 1rem;
 }
 
@@ -294,7 +307,7 @@ main {
 .skill-bar-label {
     font-size: 0.75rem;
     min-width: 220px;
-    color: var(--aws-dark-secondary);
+    color: var(--cd-dark-secondary);
 }
 
 .skill-bar {
@@ -311,11 +324,11 @@ main {
     transition: width 0.5s ease;
 }
 
-.skill-bar-fill.level-1 { background: var(--aws-red); width: 20%; }
+.skill-bar-fill.level-1 { background: var(--cd-red); width: 20%; }
 .skill-bar-fill.level-2 { background: #F2994A; width: 40%; }
-.skill-bar-fill.level-3 { background: var(--aws-yellow); width: 60%; }
+.skill-bar-fill.level-3 { background: var(--cd-yellow); width: 60%; }
 .skill-bar-fill.level-4 { background: #6FCF97; width: 80%; }
-.skill-bar-fill.level-5 { background: var(--aws-green); width: 100%; }
+.skill-bar-fill.level-5 { background: var(--cd-green); width: 100%; }
 
 .skill-bar-value {
     font-size: 0.75rem;
@@ -327,8 +340,8 @@ main {
 .mediana-box {
     display: inline-flex;
     gap: 1.5rem;
-    background: var(--aws-dark);
-    color: var(--aws-white);
+    background: var(--cd-dark);
+    color: var(--cd-white);
     padding: 0.8rem 1.5rem;
     border-radius: var(--border-radius);
     margin-top: 1rem;
@@ -339,12 +352,12 @@ main {
 }
 
 .mediana-box strong {
-    color: var(--aws-orange);
+    color: var(--cd-orange);
 }
 
 /* === FORM === */
 form {
-    background: var(--aws-white);
+    background: var(--cd-white);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     padding: 2rem;
@@ -366,7 +379,7 @@ form {
     font-size: 0.85rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
-    color: var(--aws-dark-secondary);
+    color: var(--cd-dark-secondary);
 }
 
 .form-group input,
@@ -381,13 +394,13 @@ form {
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: var(--aws-orange);
+    border-color: var(--cd-orange);
     box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.15);
 }
 
 form h3 {
     margin: 1.5rem 0 1rem;
-    color: var(--aws-dark);
+    color: var(--cd-dark);
     font-size: 1.1rem;
 }
 
@@ -412,7 +425,7 @@ form h3 small {
 .skill-input-group label {
     font-size: 0.75rem;
     flex: 1;
-    color: var(--aws-dark-secondary);
+    color: var(--cd-dark-secondary);
 }
 
 .skill-input-group input {
@@ -424,8 +437,8 @@ form h3 small {
 }
 
 .btn-primary {
-    background: var(--aws-orange);
-    color: var(--aws-dark);
+    background: var(--cd-orange);
+    color: var(--cd-dark);
     border: none;
     padding: 0.8rem 2rem;
     font-size: 1rem;
@@ -437,13 +450,13 @@ form h3 small {
 }
 
 .btn-primary:hover {
-    background: var(--aws-orange-dark);
-    color: var(--aws-white);
+    background: var(--cd-orange-dark);
+    color: var(--cd-white);
 }
 
 /* === PLANO DE DESENVOLVIMENTO === */
 .plano-conteudo {
-    background: var(--aws-white);
+    background: var(--cd-white);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     padding: 2rem;
@@ -457,12 +470,12 @@ form h3 small {
 }
 
 .sugestoes-header h3 {
-    color: var(--aws-dark);
+    color: var(--cd-dark);
 }
 
 .btn-secondary {
-    background: var(--aws-dark-secondary);
-    color: var(--aws-white);
+    background: var(--cd-dark-secondary);
+    color: var(--cd-white);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: var(--border-radius);
@@ -472,12 +485,12 @@ form h3 small {
 }
 
 .btn-secondary:hover {
-    background: var(--aws-dark);
+    background: var(--cd-dark);
 }
 
 .btn-danger {
-    background: var(--aws-red);
-    color: var(--aws-white);
+    background: var(--cd-red);
+    color: var(--cd-white);
     border: none;
     padding: 0.3rem 0.8rem;
     border-radius: 4px;
@@ -494,7 +507,7 @@ form h3 small {
 }
 
 .meta-card:hover {
-    border-color: var(--aws-orange);
+    border-color: var(--cd-orange);
 }
 
 .meta-card .meta-header {
@@ -529,7 +542,7 @@ form h3 small {
 .meta-card label {
     font-size: 0.7rem;
     font-weight: 600;
-    color: var(--aws-dark-secondary);
+    color: var(--cd-dark-secondary);
     display: block;
     margin-bottom: 2px;
 }
@@ -553,12 +566,12 @@ form h3 small {
     gap: 2rem;
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background: var(--aws-light);
+    background: var(--cd-light);
     border-radius: var(--border-radius);
 }
 
 .radar-chart-wrapper {
-    background: var(--aws-white);
+    background: var(--cd-white);
     border-radius: var(--border-radius);
     padding: 1.5rem;
     box-shadow: var(--shadow);
@@ -569,7 +582,7 @@ form h3 small {
 
 .radar-chart-wrapper h4 {
     margin-bottom: 1rem;
-    color: var(--aws-dark);
+    color: var(--cd-dark);
     font-size: 1rem;
     text-align: center;
 }
@@ -584,8 +597,8 @@ form h3 small {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    background: var(--aws-dark);
-    color: var(--aws-white);
+    background: var(--cd-dark);
+    color: var(--cd-white);
     padding: 1rem 1.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -600,8 +613,8 @@ form h3 small {
     opacity: 1;
 }
 
-.toast.success { border-left: 4px solid var(--aws-green); }
-.toast.error { border-left: 4px solid var(--aws-red); }
+.toast.success { border-left: 4px solid var(--cd-green); }
+.toast.error { border-left: 4px solid var(--cd-red); }
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {

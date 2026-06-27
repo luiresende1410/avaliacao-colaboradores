@@ -341,3 +341,42 @@ async function carregarPlano(email) {
     }
     return null;
 }
+
+// ============================================
+// DOWNLOAD PDF DO PLANO
+// ============================================
+function downloadPlanoPDF() {
+    const conteudo = document.getElementById('plano-conteudo');
+
+    if (!conteudo || !conteudo.innerHTML.trim()) {
+        showToast("Selecione um colaborador primeiro.", "error");
+        return;
+    }
+
+    const email = document.getElementById('plano-colaborador-select').value;
+    const colab = state.colaboradores.find(c => c.email === email);
+    const nomeArquivo = colab
+        ? `plano-desenvolvimento-${colab.nome.replace(/\s+/g, '-').toLowerCase()}-${state.currentQuarter}.pdf`
+        : `plano-desenvolvimento-${state.currentQuarter}.pdf`;
+
+    const opt = {
+        margin: [10, 10, 10, 10],
+        filename: nomeArquivo,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    // Temporariamente esconder botões para não aparecerem no PDF
+    const buttons = conteudo.querySelectorAll('button');
+    buttons.forEach(btn => btn.style.display = 'none');
+
+    html2pdf().set(opt).from(conteudo).save().then(() => {
+        buttons.forEach(btn => btn.style.display = '');
+        showToast("PDF gerado com sucesso!", "success");
+    }).catch(() => {
+        buttons.forEach(btn => btn.style.display = '');
+        showToast("Erro ao gerar PDF.", "error");
+    });
+}

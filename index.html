@@ -223,10 +223,13 @@
         <!-- PLANO DE DESENVOLVIMENTO -->
         <section id="plano" class="section">
             <h2>Plano de Desenvolvimento</h2>
-            <div class="filter-bar">
+            <div class="filter-bar" style="display:flex;justify-content:space-between;align-items:center;">
                 <select id="plano-colaborador-select">
                     <option value="">Selecione um colaborador</option>
                 </select>
+                <button class="btn-primary" id="btn-download-pdf" style="margin:0;padding:0.5rem 1.2rem;font-size:0.9rem;" onclick="downloadPlanoPDF()">
+                    📄 Download PDF
+                </button>
             </div>
             <div id="plano-conteudo" class="plano-conteudo"></div>
         </section>
@@ -237,6 +240,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="js/app.js"></script>
     <script src="js/ninebox.js"></script>

@@ -59,10 +59,10 @@ function gerarSugestoes(colab, avaliacao) {
 
     // Se não há gaps críticos, sugerir evolução das medianas
     if (sugestoes.length === 0) {
-        const medHard = calcMediana(avaliacao.hard);
-        const medSoft = calcMediana(avaliacao.soft);
+        const desempenho = calcDesempenho(avaliacao);
+        const potencial = calcPotencial(avaliacao);
 
-        if (medHard < 4) {
+        if (desempenho < 4) {
             const indexadas = avaliacao.hard.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v);
             indexadas.slice(0, 3).forEach(item => {
                 if (item.v < 4) {
@@ -80,9 +80,9 @@ function gerarSugestoes(colab, avaliacao) {
             });
         }
 
-        if (medSoft < 4) {
-            const indexadas = avaliacao.soft.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v);
-            indexadas.slice(0, 2).forEach(item => {
+        if (potencial < 4) {
+            const softPotencialValues = SOFT_POTENCIAL_INDICES.map(i => ({ v: avaliacao.soft[i], i })).sort((a, b) => a.v - b.v);
+            softPotencialValues.slice(0, 2).forEach(item => {
                 if (item.v < 4) {
                     sugestoes.push({
                         tipo: 'soft',
@@ -194,9 +194,9 @@ function renderPlano(colab, avaliacao) {
 
 function renderPlanoComDados(colab, avaliacao, metas) {
     const container = document.getElementById('plano-conteudo');
-    const medHard = calcMediana(avaliacao.hard);
-    const medSoft = calcMediana(avaliacao.soft);
-    const { row, col } = getNineBoxPos(medHard, medSoft);
+    const desempenho = calcDesempenho(avaliacao);
+    const potencial = calcPotencial(avaliacao);
+    const { row, col } = getNineBoxPos(desempenho, potencial);
     const nineBoxLabel = getNineBoxLabel(row, col);
 
     let metasHTML = metas.map((s, i) => `
@@ -237,8 +237,8 @@ function renderPlanoComDados(colab, avaliacao, metas) {
                 <small>Período: ${state.currentQuarter} | Quadrante: ${nineBoxLabel}</small>
             </div>
             <div class="mediana-box">
-                <span>Desempenho: <strong>${medHard}</strong></span>
-                <span>Potencial: <strong>${medSoft}</strong></span>
+                <span>Desempenho: <strong>${desempenho}</strong></span>
+                <span>Potencial: <strong>${potencial}</strong></span>
             </div>
         </div>
         <div class="sugestoes-header">

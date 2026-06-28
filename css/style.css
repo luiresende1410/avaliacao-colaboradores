@@ -679,6 +679,391 @@ form h3 small {
     max-height: 350px;
 }
 
+/* === IMPROVED FORM === */
+.avaliacao-instrucoes {
+    background: #E3F2FD;
+    border-radius: var(--border-radius);
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--cd-blue);
+}
+
+.avaliacao-instrucoes p {
+    font-size: 0.85rem;
+    color: var(--cd-dark-secondary);
+    margin: 0;
+}
+
+.form-section-header {
+    margin: 2rem 0 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--cd-light);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--cd-orange);
+}
+
+.form-section-header h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    color: var(--cd-dark);
+}
+
+.form-section-desc {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--cd-dark-secondary);
+    margin-top: 0.5rem;
+}
+
+.escala-referencia {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.escala-item {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.escala-item.level-1 { background: #F8D7DA; color: #721C24; }
+.escala-item.level-2 { background: #FFE0B2; color: #E65100; }
+.escala-item.level-3 { background: #FFF3CD; color: #856404; }
+.escala-item.level-4 { background: #D4EDDA; color: #155724; }
+.escala-item.level-5 { background: #C3F7C3; color: #0D5E0D; }
+
+.skills-grid-new {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.skill-input-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.7rem 1rem;
+    background: var(--cd-white);
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.skill-input-card:hover {
+    border-color: var(--cd-orange);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.skill-input-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--cd-dark);
+}
+
+.skill-rating {
+    display: flex;
+    gap: 4px;
+}
+
+.rating-btn {
+    width: 36px;
+    height: 30px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--cd-white);
+    color: var(--cd-dark-secondary);
+}
+
+.rating-btn:hover {
+    transform: scale(1.1);
+}
+
+.rating-btn.active {
+    transform: scale(1.05);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.level-btn-1 { border-color: #F5C6CB; }
+.level-btn-1.active { background: #D13212; color: white; border-color: #D13212; }
+.level-btn-2 { border-color: #FFE0B2; }
+.level-btn-2.active { background: #F2994A; color: white; border-color: #F2994A; }
+.level-btn-3 { border-color: #FFF3CD; }
+.level-btn-3.active { background: #F2C94C; color: var(--cd-dark); border-color: #F2C94C; }
+.level-btn-4 { border-color: #D4EDDA; }
+.level-btn-4.active { background: #6FCF97; color: var(--cd-dark); border-color: #6FCF97; }
+.level-btn-5 { border-color: #C3F7C3; }
+.level-btn-5.active { background: #1D8102; color: white; border-color: #1D8102; }
+
+.rating-label {
+    font-size: 0.7rem;
+    color: var(--cd-dark-secondary);
+    font-style: italic;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    align-items: center;
+}
+
+.form-actions .btn-primary {
+    margin-top: 0;
+}
+
+.preview-ninebox {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    background: var(--cd-light);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--cd-orange);
+}
+
+.preview-result {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.preview-quadrante {
+    font-size: 1.1rem;
+    color: var(--cd-dark);
+}
+
+.preview-quadrante strong {
+    color: var(--cd-orange-dark);
+}
+
+.preview-valores {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.preview-valores strong {
+    color: var(--cd-orange);
+}
+
+/* === COMO FUNCIONA === */
+.guia-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.guia-card {
+    background: var(--cd-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+}
+
+.guia-card h3 {
+    color: var(--cd-dark);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.guia-card p {
+    font-size: 0.9rem;
+    color: var(--cd-dark-secondary);
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+}
+
+.guia-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.guia-steps {
+    padding-left: 1.2rem;
+}
+
+.guia-steps li {
+    font-size: 0.9rem;
+    color: var(--cd-dark-secondary);
+    margin-bottom: 0.6rem;
+    line-height: 1.5;
+}
+
+.guia-formula {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.formula-eixo {
+    background: var(--cd-light);
+    padding: 1.2rem;
+    border-radius: var(--border-radius);
+}
+
+.formula-eixo h4 {
+    color: var(--cd-dark);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.formula-eixo p {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.formula-eixo ul {
+    padding-left: 1.2rem;
+}
+
+.formula-eixo li {
+    font-size: 0.85rem;
+    color: var(--cd-dark-secondary);
+    margin-bottom: 0.3rem;
+    line-height: 1.4;
+}
+
+.guia-faixas {
+    margin-top: 1rem;
+}
+
+.guia-faixas h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: var(--cd-dark);
+}
+
+.guia-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.guia-table th,
+.guia-table td {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.guia-table th {
+    background: var(--cd-dark);
+    color: var(--cd-white);
+    font-weight: 600;
+}
+
+.guia-table tr:nth-child(even) {
+    background: var(--cd-light);
+}
+
+.guia-escalas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.guia-escalas-grid h4 {
+    margin-bottom: 0.5rem;
+    color: var(--cd-dark);
+    font-size: 0.95rem;
+}
+
+.dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.dot.level-bg-1 { background: #D13212; }
+.dot.level-bg-2 { background: #F2994A; }
+.dot.level-bg-3 { background: #F2C94C; }
+.dot.level-bg-4 { background: #6FCF97; }
+.dot.level-bg-5 { background: #1D8102; }
+
+.guia-funcionalidades {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.func-item {
+    padding: 1rem;
+    background: var(--cd-light);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--cd-orange);
+}
+
+.func-item strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--cd-dark);
+    margin-bottom: 0.4rem;
+}
+
+.func-item p {
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.guia-dicas {
+    list-style: none;
+    padding: 0;
+}
+
+.guia-dicas li {
+    font-size: 0.9rem;
+    color: var(--cd-dark-secondary);
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.5;
+}
+
+.guia-dicas li:last-child {
+    border-bottom: none;
+}
+
+/* === SOFT SKILL CLASSIFICATION TAGS === */
+.tag-potencial {
+    display: inline-block;
+    background: #CCE5FF;
+    color: #004085;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 6px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.tag-execucao {
+    display: inline-block;
+    background: #FFF3CD;
+    color: #856404;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 6px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.calculo-detalhe {
+    background: var(--cd-light);
+    padding: 0.8rem 1rem;
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--cd-orange);
+}
+
 /* === TOAST === */
 .toast {
     position: fixed;
@@ -718,7 +1103,7 @@ form h3 small {
         height: 500px;
     }
 
-    .skills-grid {
+    .skills-grid-new {
         grid-template-columns: 1fr;
     }
 
@@ -736,5 +1121,22 @@ form h3 small {
 
     .decisions-grid {
         grid-template-columns: 1fr;
+    }
+
+    .guia-formula {
+        grid-template-columns: 1fr;
+    }
+
+    .guia-escalas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .escala-referencia {
+        flex-direction: column;
     }
 }

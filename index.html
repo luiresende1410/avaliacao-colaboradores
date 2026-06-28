@@ -34,6 +34,7 @@
         <button class="nav-btn" data-section="resumos">Resumo Individual</button>
         <button class="nav-btn" data-section="cadastro">Avaliar Colaborador</button>
         <button class="nav-btn" data-section="plano">Plano de Desenvolvimento</button>
+        <button class="nav-btn" data-section="como-funciona">❓ Como Funciona</button>
     </nav>
 
     <main>
@@ -41,8 +42,8 @@
         <section id="ninebox" class="section active">
             <h2>Nine Box - Potencial x Desempenho</h2>
             <div class="ninebox-legend">
-                <span><strong>Eixo X (Desempenho):</strong> Mediana das Hard Skills</span>
-                <span><strong>Eixo Y (Potencial):</strong> Mediana das Soft Skills</span>
+                <span><strong>Eixo X (Desempenho):</strong> Hard Skills (40%) + Disciplinar (30%) + Soft Skills de Execução (30%)</span>
+                <span><strong>Eixo Y (Potencial):</strong> Mediana das Soft Skills de Crescimento</span>
             </div>
             <div class="ninebox-container">
                 <div class="ninebox-grid" id="ninebox-grid">
@@ -207,16 +208,54 @@
                     </div>
                 </div>
 
-                <h3>Hard Skills <small>(1=Sem conhecimento, 2=Baixo, 3=Bom, 4=Ótimo, 5=Especialista)</small></h3>
-                <div class="skills-grid" id="hardskills-inputs"></div>
+                <div class="avaliacao-instrucoes">
+                    <p>💡 <strong>Como avaliar:</strong> Use a escala de 1 a 5 para cada competência. Clique nos botões para selecionar a nota. A cor indica o nível.</p>
+                </div>
 
-                <h3>Soft Skills <small>(1=Muito baixo, 2=Baixo, 3=Médio, 4=Alto, 5=Muito alto)</small></h3>
-                <div class="skills-grid" id="softskills-inputs"></div>
+                <div class="form-section-header">
+                    <h3>🔧 Hard Skills</h3>
+                    <div class="escala-referencia">
+                        <span class="escala-item level-1">1 = Sem conhecimento</span>
+                        <span class="escala-item level-2">2 = Baixo</span>
+                        <span class="escala-item level-3">3 = Bom</span>
+                        <span class="escala-item level-4">4 = Ótimo</span>
+                        <span class="escala-item level-5">5 = Especialista</span>
+                    </div>
+                    <small class="form-section-desc">Conhecimentos técnicos aplicados no dia a dia. Contribuem com <strong>40%</strong> para o eixo de Desempenho no Nine Box.</small>
+                </div>
+                <div class="skills-grid-new" id="hardskills-inputs"></div>
 
-                <h3>Avaliação Disciplinar <small>(1=Muito baixo, 2=Baixo, 3=Médio, 4=Alto, 5=Muito alto)</small></h3>
-                <div class="skills-grid" id="disciplinar-inputs"></div>
+                <div class="form-section-header">
+                    <h3>🧠 Soft Skills</h3>
+                    <div class="escala-referencia">
+                        <span class="escala-item level-1">1 = Muito baixo</span>
+                        <span class="escala-item level-2">2 = Baixo</span>
+                        <span class="escala-item level-3">3 = Médio</span>
+                        <span class="escala-item level-4">4 = Alto</span>
+                        <span class="escala-item level-5">5 = Muito alto</span>
+                    </div>
+                    <small class="form-section-desc">Habilidades comportamentais. As marcadas com <span class="tag-potencial">P</span> compõem o eixo de Potencial. As marcadas com <span class="tag-execucao">D</span> contribuem para o Desempenho (30%).</small>
+                </div>
+                <div class="skills-grid-new" id="softskills-inputs"></div>
 
-                <button type="submit" class="btn-primary">Salvar Avaliação</button>
+                <div class="form-section-header">
+                    <h3>📋 Avaliação Disciplinar</h3>
+                    <div class="escala-referencia">
+                        <span class="escala-item level-1">1 = Crítico</span>
+                        <span class="escala-item level-2">2 = Abaixo do esperado</span>
+                        <span class="escala-item level-3">3 = Adequado</span>
+                        <span class="escala-item level-4">4 = Bom</span>
+                        <span class="escala-item level-5">5 = Exemplar</span>
+                    </div>
+                    <small class="form-section-desc">Postura e disciplina profissional. Contribuem com <strong>30%</strong> para o eixo de Desempenho no Nine Box.</small>
+                </div>
+                <div class="skills-grid-new" id="disciplinar-inputs"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">💾 Salvar Avaliação</button>
+                    <button type="button" class="btn-secondary" id="btn-preview-avaliacao">👁️ Pré-visualizar Nine Box</button>
+                </div>
+                <div id="preview-ninebox" class="preview-ninebox" style="display:none;"></div>
             </form>
         </section>
 
@@ -232,6 +271,156 @@
                 </button>
             </div>
             <div id="plano-conteudo" class="plano-conteudo"></div>
+        </section>
+
+        <!-- COMO FUNCIONA -->
+        <section id="como-funciona" class="section">
+            <h2>Como Funciona o Sistema</h2>
+            <div class="guia-container">
+
+                <div class="guia-card">
+                    <div class="guia-icon">🎯</div>
+                    <h3>Objetivo do Sistema</h3>
+                    <p>Este sistema permite avaliar colaboradores de forma estruturada usando a metodologia <strong>Nine Box</strong>, que cruza <strong>Desempenho</strong> (o que a pessoa entrega hoje) com <strong>Potencial</strong> (capacidade de crescer para papéis maiores).</p>
+                    <p>O resultado ajuda a tomar decisões sobre promoções, treinamentos, realocações e planos de desenvolvimento individuais.</p>
+                </div>
+
+                <div class="guia-card">
+                    <div class="guia-icon">📝</div>
+                    <h3>Passo a Passo para Avaliar</h3>
+                    <ol class="guia-steps">
+                        <li><strong>Selecione o período</strong> no canto superior direito (ex: Q2 2026).</li>
+                        <li>Vá em <strong>"Avaliar Colaborador"</strong>.</li>
+                        <li>Selecione um colaborador existente no dropdown ou preencha os dados para um novo.</li>
+                        <li>Avalie cada competência de <strong>1 a 5</strong> clicando nos botões.</li>
+                        <li>Clique em <strong>"Pré-visualizar Nine Box"</strong> para ver onde o colaborador cairá antes de salvar.</li>
+                        <li>Clique em <strong>"Salvar Avaliação"</strong> para confirmar.</li>
+                    </ol>
+                </div>
+
+                <div class="guia-card">
+                    <div class="guia-icon">📊</div>
+                    <h3>Como o Nine Box é Calculado</h3>
+                    <div class="guia-formula">
+                        <div class="formula-eixo">
+                            <h4>Eixo X — Desempenho</h4>
+                            <p>Média ponderada de três componentes:</p>
+                            <ul>
+                                <li><strong>Hard Skills (40%)</strong> — Conhecimentos técnicos (mediana das 23 habilidades)</li>
+                                <li><strong>Disciplinar (30%)</strong> — Pontualidade, assiduidade, postura (mediana das 7 avaliações)</li>
+                                <li><strong>Soft Skills de Execução (30%)</strong> — Foco no Cliente, Excelência, Gestão de Recursos, Confiabilidade, Orientação a Resultados (mediana das 5)</li>
+                            </ul>
+                        </div>
+                        <div class="formula-eixo">
+                            <h4>Eixo Y — Potencial</h4>
+                            <p>Mediana de 8 Soft Skills de crescimento:</p>
+                            <ul>
+                                <li>Senso de Dono</li>
+                                <li>Inovação e Simplificação</li>
+                                <li>Tomada de Decisão</li>
+                                <li>Aprendizado Contínuo</li>
+                                <li>Visão Estratégica</li>
+                                <li>Proatividade</li>
+                                <li>Capacidade Analítica</li>
+                                <li>Assertividade e Colaboração</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="guia-faixas">
+                        <h4>Faixas do Nine Box</h4>
+                        <table class="guia-table">
+                            <thead>
+                                <tr><th>Faixa</th><th>Valor</th><th>Classificação</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Baixo</td><td>1.0 a 2.3</td><td>Linha/coluna inferior</td></tr>
+                                <tr><td>Médio</td><td>2.4 a 3.6</td><td>Linha/coluna central</td></tr>
+                                <tr><td>Alto</td><td>3.7 a 5.0</td><td>Linha/coluna superior</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="guia-card">
+                    <div class="guia-icon">🔧</div>
+                    <h3>Escalas de Avaliação</h3>
+                    <div class="guia-escalas-grid">
+                        <div>
+                            <h4>Hard Skills</h4>
+                            <table class="guia-table">
+                                <tbody>
+                                    <tr><td><span class="dot level-bg-1"></span> 1</td><td>Sem conhecimento — nunca trabalhou com isso</td></tr>
+                                    <tr><td><span class="dot level-bg-2"></span> 2</td><td>Baixo — conhece superficialmente, precisa de ajuda</td></tr>
+                                    <tr><td><span class="dot level-bg-3"></span> 3</td><td>Bom — executa com autonomia em cenários comuns</td></tr>
+                                    <tr><td><span class="dot level-bg-4"></span> 4</td><td>Ótimo — resolve problemas complexos, pode ensinar</td></tr>
+                                    <tr><td><span class="dot level-bg-5"></span> 5</td><td>Especialista — referência no time, domina profundamente</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <h4>Soft Skills</h4>
+                            <table class="guia-table">
+                                <tbody>
+                                    <tr><td><span class="dot level-bg-1"></span> 1</td><td>Muito baixo — raramente demonstra o comportamento</td></tr>
+                                    <tr><td><span class="dot level-bg-2"></span> 2</td><td>Baixo — demonstra ocasionalmente, precisa melhorar</td></tr>
+                                    <tr><td><span class="dot level-bg-3"></span> 3</td><td>Médio — demonstra de forma consistente o esperado</td></tr>
+                                    <tr><td><span class="dot level-bg-4"></span> 4</td><td>Alto — supera o esperado, é exemplo para outros</td></tr>
+                                    <tr><td><span class="dot level-bg-5"></span> 5</td><td>Muito alto — excelência, influencia positivamente o time</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <h4>Disciplinar</h4>
+                            <table class="guia-table">
+                                <tbody>
+                                    <tr><td><span class="dot level-bg-1"></span> 1</td><td>Crítico — frequentemente descumpre, necessita intervenção</td></tr>
+                                    <tr><td><span class="dot level-bg-2"></span> 2</td><td>Abaixo do esperado — falhas recorrentes, precisa melhorar</td></tr>
+                                    <tr><td><span class="dot level-bg-3"></span> 3</td><td>Adequado — cumpre o básico de forma aceitável</td></tr>
+                                    <tr><td><span class="dot level-bg-4"></span> 4</td><td>Bom — consistente e confiável na maioria das situações</td></tr>
+                                    <tr><td><span class="dot level-bg-5"></span> 5</td><td>Exemplar — modelo de conduta para toda a equipe</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guia-card">
+                    <div class="guia-icon">📋</div>
+                    <h3>Funcionalidades do Sistema</h3>
+                    <div class="guia-funcionalidades">
+                        <div class="func-item">
+                            <strong>Nine Box</strong>
+                            <p>Visão geral de todos os colaboradores posicionados no grid 3x3. Clique em um nome para ver o resumo individual. Inclui guia de decisão por quadrante.</p>
+                        </div>
+                        <div class="func-item">
+                            <strong>Resumo Individual</strong>
+                            <p>Detalhamento completo de um colaborador: gráficos radar, barras de progresso por competência, e indicação do quadrante no Nine Box.</p>
+                        </div>
+                        <div class="func-item">
+                            <strong>Avaliar Colaborador</strong>
+                            <p>Formulário para cadastrar novos colaboradores ou atualizar avaliações existentes. Cada avaliação é vinculada a um período (quarter).</p>
+                        </div>
+                        <div class="func-item">
+                            <strong>Plano de Desenvolvimento</strong>
+                            <p>Gera automaticamente sugestões de metas baseadas nos gaps identificados. Você pode editar, adicionar ou remover metas. Também permite exportar em PDF.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guia-card">
+                    <div class="guia-icon">⚠️</div>
+                    <h3>Dicas Importantes</h3>
+                    <ul class="guia-dicas">
+                        <li><strong>Período correto:</strong> Sempre verifique se o período selecionado no topo está correto antes de avaliar. Cada avaliação fica vinculada ao quarter.</li>
+                        <li><strong>Seja honesto:</strong> A avaliação deve refletir o momento atual do colaborador. Não compare com outros — avalie contra o esperado para a função.</li>
+                        <li><strong>Não há nota "certa":</strong> Uma nota 3 é "Bom/Médio" e é perfeitamente aceitável para muitas competências. Nem todo mundo precisa ser 5 em tudo.</li>
+                        <li><strong>Hard Skills variam por função:</strong> Um SRE pode ter nota 1 em "Gerenciamento Windows" sem problema — não é seu foco. Avalie o que é relevante para o papel.</li>
+                        <li><strong>Pré-visualize:</strong> Use o botão "Pré-visualizar Nine Box" antes de salvar para confirmar se a classificação faz sentido.</li>
+                        <li><strong>Edição:</strong> Você pode reeditar uma avaliação a qualquer momento selecionando o colaborador novamente no formulário.</li>
+                    </ul>
+                </div>
+
+            </div>
         </section>
     </main>
 

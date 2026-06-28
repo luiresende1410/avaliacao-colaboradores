@@ -82,6 +82,33 @@ const state = {
 };
 
 // ============================================
+// CLASSIFICAÇÃO DAS SOFT SKILLS
+// ============================================
+// Índices das Soft Skills que medem EXECUÇÃO (impactam desempenho atual)
+const SOFT_EXECUCAO_INDICES = [0, 5, 8, 9, 12];
+// 0 = Foco no Cliente
+// 5 = Excelência e Qualidade
+// 8 = Gestão de Recursos
+// 9 = Confiabilidade e Transparência
+// 12 = Orientação a Resultados
+
+// Índices das Soft Skills que medem POTENCIAL (capacidade de crescimento)
+const SOFT_POTENCIAL_INDICES = [1, 2, 3, 4, 6, 7, 10, 11];
+// 1 = Senso de Dono
+// 2 = Inovação e Simplificação
+// 3 = Tomada de Decisão
+// 4 = Aprendizado Contínuo
+// 6 = Visão Estratégica
+// 7 = Proatividade
+// 10 = Capacidade Analítica
+// 11 = Assertividade e Colaboração
+
+// Pesos para o cálculo de Desempenho
+const PESO_HARD = 0.4;
+const PESO_DISCIPLINAR = 0.3;
+const PESO_SOFT_EXECUCAO = 0.3;
+
+// ============================================
 // UTILITÁRIOS
 // ============================================
 function calcMediana(arr) {
@@ -91,6 +118,40 @@ function calcMediana(arr) {
     return sorted.length % 2 !== 0
         ? sorted[mid]
         : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/**
+ * Calcula o DESEMPENHO (eixo X do Nine Box)
+ * Média ponderada de:
+ *   - Mediana Hard Skills (40%)
+ *   - Mediana Disciplinar (30%)
+ *   - Mediana Soft Skills de execução (30%)
+ */
+function calcDesempenho(avaliacao) {
+    if (!avaliacao || !avaliacao.hard || !avaliacao.soft) return null;
+
+    const medHard = calcMediana(avaliacao.hard);
+    const softExecucao = SOFT_EXECUCAO_INDICES.map(i => avaliacao.soft[i]);
+    const medSoftExec = calcMediana(softExecucao);
+
+    // Se não tem disciplinar, redistribui o peso entre hard e soft execução
+    if (!avaliacao.disciplinar) {
+        return Math.round(((medHard * 0.55) + (medSoftExec * 0.45)) * 100) / 100;
+    }
+
+    const medDisc = calcMediana(avaliacao.disciplinar);
+    return Math.round(((medHard * PESO_HARD) + (medDisc * PESO_DISCIPLINAR) + (medSoftExec * PESO_SOFT_EXECUCAO)) * 100) / 100;
+}
+
+/**
+ * Calcula o POTENCIAL (eixo Y do Nine Box)
+ * Mediana das Soft Skills de crescimento (8 skills)
+ */
+function calcPotencial(avaliacao) {
+    if (!avaliacao || !avaliacao.soft) return null;
+
+    const softPotencial = SOFT_POTENCIAL_INDICES.map(i => avaliacao.soft[i]);
+    return calcMediana(softPotencial);
 }
 
 function getLevelLabel(val, type) {
@@ -106,13 +167,13 @@ function getLevelLabel(val, type) {
     }
 }
 
-function getNineBoxPos(medHard, medSoft) {
+function getNineBoxPos(desempenho, potencial) {
     function getZone(val) {
         if (val <= 2.3) return 1;
         if (val <= 3.6) return 2;
         return 3;
     }
-    return { row: getZone(medSoft), col: getZone(medHard) };
+    return { row: getZone(potencial), col: getZone(desempenho) };
 }
 
 function showToast(msg, type = 'success') {
@@ -338,9 +399,10 @@ function preencherFormularioEdicao() {
         document.getElementById('input-email').value = '';
         document.getElementById('input-email').disabled = false;
         document.getElementById('input-area').value = 'SRE';
-        HARD_SKILLS.forEach((_, i) => { document.getElementById(`hard_${i}`).value = 3; });
-        SOFT_SKILLS.forEach((_, i) => { document.getElementById(`soft_${i}`).value = 3; });
-        DISCIPLINAR.forEach((_, i) => { document.getElementById(`disc_${i}`).value = 3; });
+        setAllRatings('hard', HARD_SKILLS.length, 3);
+        setAllRatings('soft', SOFT_SKILLS.length, 3);
+        setAllRatings('disc', DISCIPLINAR.length, 3);
+        document.getElementById('preview-ninebox').style.display = 'none';
         return;
     }
 
@@ -356,18 +418,46 @@ function preencherFormularioEdicao() {
     // Preencher notas do quarter atual (se existirem)
     const avaliacao = getAvaliacaoAtual(email);
     if (avaliacao) {
-        avaliacao.hard.forEach((val, i) => { document.getElementById(`hard_${i}`).value = val; });
-        avaliacao.soft.forEach((val, i) => { document.getElementById(`soft_${i}`).value = val; });
+        avaliacao.hard.forEach((val, i) => setRatingByValue('hard_' + i, val));
+        avaliacao.soft.forEach((val, i) => setRatingByValue('soft_' + i, val));
         if (avaliacao.disciplinar) {
-            avaliacao.disciplinar.forEach((val, i) => { document.getElementById(`disc_${i}`).value = val; });
+            avaliacao.disciplinar.forEach((val, i) => setRatingByValue('disc_' + i, val));
         } else {
-            DISCIPLINAR.forEach((_, i) => { document.getElementById(`disc_${i}`).value = 3; });
+            setAllRatings('disc', DISCIPLINAR.length, 3);
         }
     } else {
         // Sem avaliação nesse quarter, valores padrão
-        HARD_SKILLS.forEach((_, i) => { document.getElementById(`hard_${i}`).value = 1; });
-        SOFT_SKILLS.forEach((_, i) => { document.getElementById(`soft_${i}`).value = 1; });
-        DISCIPLINAR.forEach((_, i) => { document.getElementById(`disc_${i}`).value = 1; });
+        setAllRatings('hard', HARD_SKILLS.length, 1);
+        setAllRatings('soft', SOFT_SKILLS.length, 1);
+        setAllRatings('disc', DISCIPLINAR.length, 1);
+    }
+
+    document.getElementById('preview-ninebox').style.display = 'none';
+}
+
+// Helpers para o novo formulário com botões
+function setRatingByValue(targetId, value) {
+    document.getElementById(targetId).value = value;
+    const container = document.querySelector(`.skill-rating[data-target="${targetId}"]`);
+    if (container) {
+        container.querySelectorAll('.rating-btn').forEach(b => {
+            b.classList.toggle('active', parseInt(b.dataset.value) === value);
+        });
+    }
+    const labelEl = document.getElementById(`${targetId}_label`);
+    if (labelEl) {
+        const labels = targetId.startsWith('hard_')
+            ? ['Sem conhecimento', 'Baixo', 'Bom', 'Ótimo', 'Especialista']
+            : targetId.startsWith('disc_')
+                ? ['Crítico', 'Abaixo do esperado', 'Adequado', 'Bom', 'Exemplar']
+                : ['Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
+        labelEl.textContent = labels[value - 1];
+    }
+}
+
+function setAllRatings(prefix, count, value) {
+    for (let i = 0; i < count; i++) {
+        setRatingByValue(`${prefix}_${i}`, value);
     }
 }
 
@@ -378,6 +468,8 @@ function renderResumo(colab, avaliacao) {
     const medHard = calcMediana(avaliacao.hard);
     const medSoft = calcMediana(avaliacao.soft);
     const medDisc = avaliacao.disciplinar ? calcMediana(avaliacao.disciplinar) : null;
+    const desempenho = calcDesempenho(avaliacao);
+    const potencial = calcPotencial(avaliacao);
 
     let hardBars = avaliacao.hard.map((val, i) => `
         <div class="skill-bar-container">
@@ -391,7 +483,7 @@ function renderResumo(colab, avaliacao) {
 
     let softBars = avaliacao.soft.map((val, i) => `
         <div class="skill-bar-container">
-            <span class="skill-bar-label">${SOFT_SKILLS[i]}</span>
+            <span class="skill-bar-label">${SOFT_SKILLS[i]}${SOFT_POTENCIAL_INDICES.includes(i) ? ' <span class="tag-potencial">P</span>' : ' <span class="tag-execucao">D</span>'}</span>
             <div class="skill-bar">
                 <div class="skill-bar-fill level-${val}"></div>
             </div>
@@ -412,7 +504,7 @@ function renderResumo(colab, avaliacao) {
         `).join('');
     }
 
-    const { row, col } = getNineBoxPos(medHard, medSoft);
+    const { row, col } = getNineBoxPos(desempenho, potencial);
     const nineBoxLabel = getNineBoxLabel(row, col);
 
     document.getElementById('resumo-detalhe').innerHTML = `
@@ -427,9 +519,14 @@ function renderResumo(colab, avaliacao) {
             </div>
         </div>
         <div class="mediana-box" style="margin-bottom:1.5rem;">
-            <span>Desempenho (Hard): <strong>${medHard}</strong></span>
-            <span>Potencial (Soft): <strong>${medSoft}</strong></span>
-            ${medDisc !== null ? `<span>Disciplinar: <strong>${medDisc}</strong></span>` : ''}
+            <span>Desempenho: <strong>${desempenho}</strong></span>
+            <span>Potencial: <strong>${potencial}</strong></span>
+        </div>
+        <div class="calculo-detalhe" style="margin-bottom:1.5rem;">
+            <small style="color:#666;">
+                <strong>Cálculo do Desempenho:</strong> Hard Skills (med. ${medHard}) × 40% + Disciplinar (med. ${medDisc !== null ? medDisc : 'N/A'}) × 30% + Soft Execução × 30%<br>
+                <strong>Cálculo do Potencial:</strong> Mediana das Soft Skills de crescimento (Senso de Dono, Inovação, Tomada de Decisão, Aprendizado, Visão Estratégica, Proatividade, Cap. Analítica, Assertividade)
+            </small>
         </div>
 
         <div class="radar-charts-container">
@@ -578,34 +675,121 @@ function renderRadarCharts(avaliacao) {
 }
 
 // ============================================
-// FORMULÁRIO DE CADASTRO
+// FORMULÁRIO DE CADASTRO (MELHORADO)
 // ============================================
 function buildSkillInputs() {
     const hardContainer = document.getElementById('hardskills-inputs');
     const softContainer = document.getElementById('softskills-inputs');
     const discContainer = document.getElementById('disciplinar-inputs');
 
+    const hardLabels = ['Sem conhecimento', 'Baixo', 'Bom', 'Ótimo', 'Especialista'];
+    const softLabels = ['Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
+    const discLabels = ['Crítico', 'Abaixo do esperado', 'Adequado', 'Bom', 'Exemplar'];
+
     hardContainer.innerHTML = HARD_SKILLS.map((skill, i) => `
-        <div class="skill-input-group">
-            <label for="hard_${i}">${skill}</label>
-            <input type="number" id="hard_${i}" name="hard_${i}" min="1" max="5" value="3" required>
+        <div class="skill-input-card">
+            <div class="skill-input-label">${skill}</div>
+            <div class="skill-rating" data-target="hard_${i}">
+                ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 3 ? ' active' : ''}" data-value="${v}" title="${hardLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
+            </div>
+            <input type="hidden" id="hard_${i}" name="hard_${i}" value="3">
+            <span class="rating-label" id="hard_${i}_label">${hardLabels[2]}</span>
         </div>
     `).join('');
 
-    softContainer.innerHTML = SOFT_SKILLS.map((skill, i) => `
-        <div class="skill-input-group">
-            <label for="soft_${i}">${skill}</label>
-            <input type="number" id="soft_${i}" name="soft_${i}" min="1" max="5" value="3" required>
+    softContainer.innerHTML = SOFT_SKILLS.map((skill, i) => {
+        const tag = SOFT_POTENCIAL_INDICES.includes(i)
+            ? '<span class="tag-potencial">Potencial</span>'
+            : '<span class="tag-execucao">Desempenho</span>';
+        return `
+        <div class="skill-input-card">
+            <div class="skill-input-label">${skill} ${tag}</div>
+            <div class="skill-rating" data-target="soft_${i}">
+                ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 3 ? ' active' : ''}" data-value="${v}" title="${softLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
+            </div>
+            <input type="hidden" id="soft_${i}" name="soft_${i}" value="3">
+            <span class="rating-label" id="soft_${i}_label">${softLabels[2]}</span>
         </div>
-    `).join('');
+    `}).join('');
 
     discContainer.innerHTML = DISCIPLINAR.map((skill, i) => `
-        <div class="skill-input-group">
-            <label for="disc_${i}">${skill}</label>
-            <input type="number" id="disc_${i}" name="disc_${i}" min="1" max="5" value="3" required>
+        <div class="skill-input-card">
+            <div class="skill-input-label">${skill}</div>
+            <div class="skill-rating" data-target="disc_${i}">
+                ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 3 ? ' active' : ''}" data-value="${v}" title="${discLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
+            </div>
+            <input type="hidden" id="disc_${i}" name="disc_${i}" value="3">
+            <span class="rating-label" id="disc_${i}_label">${discLabels[2]}</span>
         </div>
     `).join('');
 }
+
+function setRating(btn) {
+    const value = parseInt(btn.dataset.value);
+    const container = btn.parentElement;
+    const targetId = container.dataset.target;
+
+    // Atualizar input hidden
+    document.getElementById(targetId).value = value;
+
+    // Atualizar botões ativos
+    container.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Atualizar label
+    const labelEl = document.getElementById(`${targetId}_label`);
+    if (labelEl) {
+        const labels = targetId.startsWith('hard_')
+            ? ['Sem conhecimento', 'Baixo', 'Bom', 'Ótimo', 'Especialista']
+            : targetId.startsWith('disc_')
+                ? ['Crítico', 'Abaixo do esperado', 'Adequado', 'Bom', 'Exemplar']
+                : ['Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
+        labelEl.textContent = labels[value - 1];
+    }
+}
+
+// Pré-visualizar onde o colaborador cairá no Nine Box
+document.getElementById('btn-preview-avaliacao').addEventListener('click', function() {
+    const previewDiv = document.getElementById('preview-ninebox');
+
+    const hard = HARD_SKILLS.map((_, i) => {
+        const val = parseInt(document.getElementById(`hard_${i}`).value);
+        return Math.min(5, Math.max(1, val));
+    });
+
+    const soft = SOFT_SKILLS.map((_, i) => {
+        const val = parseInt(document.getElementById(`soft_${i}`).value);
+        return Math.min(5, Math.max(1, val));
+    });
+
+    const disciplinar = DISCIPLINAR.map((_, i) => {
+        const val = parseInt(document.getElementById(`disc_${i}`).value);
+        return Math.min(5, Math.max(1, val));
+    });
+
+    const avaliacao = { hard, soft, disciplinar };
+    const desempenho = calcDesempenho(avaliacao);
+    const potencial = calcPotencial(avaliacao);
+    const { row, col } = getNineBoxPos(desempenho, potencial);
+    const nineBoxLabel = getNineBoxLabel(row, col);
+
+    previewDiv.style.display = 'block';
+    previewDiv.innerHTML = `
+        <div class="preview-result">
+            <div class="preview-quadrante">
+                <strong>Quadrante:</strong> ${nineBoxLabel}
+            </div>
+            <div class="preview-valores">
+                <span>Desempenho: <strong>${desempenho}</strong></span>
+                <span>Potencial: <strong>${potencial}</strong></span>
+            </div>
+            <small style="color:#666;">
+                Hard (med. ${calcMediana(hard)}) × 40% + Disciplinar (med. ${calcMediana(disciplinar)}) × 30% + Soft Exec. × 30% = ${desempenho} |
+                Potencial (med. soft crescimento) = ${potencial}
+            </small>
+        </div>
+    `;
+});
 
 document.getElementById('form-colaborador').addEventListener('submit', async function (e) {
     e.preventDefault();

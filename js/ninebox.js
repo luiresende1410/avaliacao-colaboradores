@@ -22,16 +22,16 @@ function renderNineBox() {
             return;
         }
 
-        const medHard = calcMediana(avaliacao.hard);
-        const medSoft = calcMediana(avaliacao.soft);
-        const { row, col } = getNineBoxPos(medHard, medSoft);
+        const desempenho = calcDesempenho(avaliacao);
+        const potencial = calcPotencial(avaliacao);
+        const { row, col } = getNineBoxPos(desempenho, potencial);
 
         const cell = document.querySelector(`.nine-cell[data-row="${row}"][data-col="${col}"] .cell-people`);
         if (cell) {
             const badge = document.createElement('span');
             badge.className = 'person-badge';
             badge.textContent = colab.nome.split(' ')[0];
-            badge.title = `${colab.nome}\nDesempenho: ${medHard} | Potencial: ${medSoft}\nPeríodo: ${state.currentQuarter}`;
+            badge.title = `${colab.nome}\nDesempenho: ${desempenho} | Potencial: ${potencial}\nPeríodo: ${state.currentQuarter}`;
             badge.addEventListener('click', () => {
                 // Navegar para resumo
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));

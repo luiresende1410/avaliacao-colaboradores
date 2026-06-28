@@ -602,6 +602,58 @@ function getNineBoxLabel(row, col) {
 // ============================================
 // GRÁFICOS RADAR (Chart.js)
 // ============================================
+
+/**
+ * Calcula a média da empresa para cada skill, considerando apenas
+ * colaboradores da mesma área (para hard skills) ou todos (soft/disc)
+ */
+function calcMediaEmpresa(tipo, area) {
+    const avaliacoes = state.avaliacoes.filter(a => a.quarter === state.currentQuarter);
+
+    if (tipo === 'hard') {
+        // Filtrar apenas colaboradores da mesma área
+        const colabsArea = state.colaboradores.filter(c => {
+            const areaGrupo = (c.area === 'DEV') ? 'DEV' : 'SRE_DEVOPS';
+            const targetGrupo = (area === 'DEV') ? 'DEV' : 'SRE_DEVOPS';
+            return areaGrupo === targetGrupo;
+        }).map(c => c.email);
+
+        const avalsArea = avaliacoes.filter(a => colabsArea.includes(a.email) && a.hard);
+        if (avalsArea.length === 0) return null;
+
+        const hardSkills = getHardSkills(area);
+        const medias = hardSkills.map((_, i) => {
+            const valores = avalsArea.map(a => a.hard[i]).filter(v => v !== undefined);
+            return valores.length > 0 ? Math.round((valores.reduce((s, v) => s + v, 0) / valores.length) * 10) / 10 : 0;
+        });
+        return medias;
+    }
+
+    if (tipo === 'soft') {
+        const avalsComSoft = avaliacoes.filter(a => a.soft);
+        if (avalsComSoft.length === 0) return null;
+
+        const medias = SOFT_SKILLS.map((_, i) => {
+            const valores = avalsComSoft.map(a => a.soft[i]).filter(v => v !== undefined);
+            return valores.length > 0 ? Math.round((valores.reduce((s, v) => s + v, 0) / valores.length) * 10) / 10 : 0;
+        });
+        return medias;
+    }
+
+    if (tipo === 'disciplinar') {
+        const avalsComDisc = avaliacoes.filter(a => a.disciplinar);
+        if (avalsComDisc.length === 0) return null;
+
+        const medias = DISCIPLINAR.map((_, i) => {
+            const valores = avalsComDisc.map(a => a.disciplinar[i]).filter(v => v !== undefined);
+            return valores.length > 0 ? Math.round((valores.reduce((s, v) => s + v, 0) / valores.length) * 10) / 10 : 0;
+        });
+        return medias;
+    }
+
+    return null;
+}
+
 function renderRadarCharts(avaliacao, colab) {
     // Destruir gráficos anteriores se existirem
     if (window._radarHard) window._radarHard.destroy();
@@ -609,6 +661,11 @@ function renderRadarCharts(avaliacao, colab) {
     if (window._radarDisc) window._radarDisc.destroy();
 
     const hardSkills = getHardSkills(colab.area);
+
+    // Calcular médias da empresa
+    const mediaHard = calcMediaEmpresa('hard', colab.area);
+    const mediaSoft = calcMediaEmpresa('soft', colab.area);
+    const mediaDisc = calcMediaEmpresa('disciplinar', colab.area);
 
     const radarOptions = {
         responsive: true,
@@ -625,34 +682,52 @@ function renderRadarCharts(avaliacao, colab) {
                 pointLabels: {
                     font: { size: 9 },
                     callback: function(label) {
-                        // Truncar labels longos
                         return label.length > 20 ? label.substring(0, 18) + '...' : label;
                     }
                 }
             }
         },
         plugins: {
-            legend: { display: false }
+            legend: {
+                display: true,
+                position: 'bottom',
+                labels: { font: { size: 10 }, boxWidth: 12 }
+            }
         }
+    };
+
+    // Dataset da média da empresa (cinza)
+    const mediaDatasetStyle = {
+        backgroundColor: 'rgba(150, 150, 150, 0.08)',
+        borderColor: 'rgba(150, 150, 150, 0.5)',
+        borderWidth: 1.5,
+        borderDash: [4, 4],
+        pointBackgroundColor: 'rgba(150, 150, 150, 0.6)',
+        pointRadius: 2
     };
 
     // Radar Hard Skills
     const ctxHard = document.getElementById('radar-hard');
     if (ctxHard) {
+        const datasets = [{
+            label: colab.nome.split(' ')[0],
+            data: avaliacao.hard,
+            backgroundColor: 'rgba(255, 153, 0, 0.2)',
+            borderColor: '#FF9900',
+            borderWidth: 2,
+            pointBackgroundColor: '#EC7211',
+            pointRadius: 3
+        }];
+        if (mediaHard) {
+            datasets.push({
+                label: 'Média ' + (colab.area === 'DEV' ? 'DEV' : 'SRE/DevOps'),
+                data: mediaHard,
+                ...mediaDatasetStyle
+            });
+        }
         window._radarHard = new Chart(ctxHard, {
             type: 'radar',
-            data: {
-                labels: hardSkills.map(s => s.length > 25 ? s.substring(0, 23) + '...' : s),
-                datasets: [{
-                    label: 'Hard Skills',
-                    data: avaliacao.hard,
-                    backgroundColor: 'rgba(255, 153, 0, 0.2)',
-                    borderColor: '#FF9900',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#EC7211',
-                    pointRadius: 3
-                }]
-            },
+            data: { labels: hardSkills.map(s => s.length > 25 ? s.substring(0, 23) + '...' : s), datasets },
             options: radarOptions
         });
     }
@@ -660,20 +735,25 @@ function renderRadarCharts(avaliacao, colab) {
     // Radar Soft Skills
     const ctxSoft = document.getElementById('radar-soft');
     if (ctxSoft) {
+        const datasets = [{
+            label: colab.nome.split(' ')[0],
+            data: avaliacao.soft,
+            backgroundColor: 'rgba(27, 101, 157, 0.2)',
+            borderColor: '#1B659D',
+            borderWidth: 2,
+            pointBackgroundColor: '#1B659D',
+            pointRadius: 3
+        }];
+        if (mediaSoft) {
+            datasets.push({
+                label: 'Média Empresa',
+                data: mediaSoft,
+                ...mediaDatasetStyle
+            });
+        }
         window._radarSoft = new Chart(ctxSoft, {
             type: 'radar',
-            data: {
-                labels: SOFT_SKILLS,
-                datasets: [{
-                    label: 'Soft Skills',
-                    data: avaliacao.soft,
-                    backgroundColor: 'rgba(27, 101, 157, 0.2)',
-                    borderColor: '#1B659D',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#1B659D',
-                    pointRadius: 3
-                }]
-            },
+            data: { labels: SOFT_SKILLS, datasets },
             options: radarOptions
         });
     }
@@ -682,20 +762,25 @@ function renderRadarCharts(avaliacao, colab) {
     if (avaliacao.disciplinar) {
         const ctxDisc = document.getElementById('radar-disc');
         if (ctxDisc) {
+            const datasets = [{
+                label: colab.nome.split(' ')[0],
+                data: avaliacao.disciplinar,
+                backgroundColor: 'rgba(29, 129, 2, 0.2)',
+                borderColor: '#1D8102',
+                borderWidth: 2,
+                pointBackgroundColor: '#1D8102',
+                pointRadius: 3
+            }];
+            if (mediaDisc) {
+                datasets.push({
+                    label: 'Média Empresa',
+                    data: mediaDisc,
+                    ...mediaDatasetStyle
+                });
+            }
             window._radarDisc = new Chart(ctxDisc, {
                 type: 'radar',
-                data: {
-                    labels: DISCIPLINAR,
-                    datasets: [{
-                        label: 'Disciplinar',
-                        data: avaliacao.disciplinar,
-                        backgroundColor: 'rgba(29, 129, 2, 0.2)',
-                        borderColor: '#1D8102',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#1D8102',
-                        pointRadius: 3
-                    }]
-                },
+                data: { labels: DISCIPLINAR, datasets },
                 options: radarOptions
             });
         }

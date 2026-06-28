@@ -2,29 +2,21 @@
 // DADOS INICIAIS DA PLANILHA
 // ============================================
 const HARD_SKILLS_SRE = [
-    "Desenvolvimento de Scripts (Python, Bash, PowerShell)",
-    "Comandos e Administração Linux",
-    "Gerenciamento de Servidores Windows (AD, GPO)",
+    "Scripting e Automação (Python, Bash, PowerShell)",
+    "Administração de Sistemas (Linux e Windows)",
     "Pipelines CI/CD (Jenkins, GitLab CI, GitHub Actions)",
-    "Containers (Docker, Kubernetes)",
-    "Terraform (ou Ansible / CloudFormation)",
-    "GCP: Compute & Containers (GCE, GKE)",
-    "GCP: Redes (VPC, Load Balancing, Cloud Armor)",
-    "GCP: Serverless (Cloud Functions, Cloud Run)",
-    "AWS: Compute & Containers (ECS, EKS)",
-    "AWS: Redes (VPC, Load Balancing, WAF/Shield)",
-    "AWS: Serverless (Lambda, Fargate)",
-    "Datadog: Monitoramento de Infra & APM",
-    "Datadog: Gestão de Logs e Dashboards",
-    "Ferramentas (Prometheus, Grafana, CloudWatch)",
-    "Sophos: Gestão de Endpoint (Central)",
-    "Sophos: Gestão de Firewall (XG/SFOS)",
-    "Conceitos de Redes (Firewalls, VPNs, Roteamento)",
-    "Acronis Cyber Protect: Gestão de Backup",
-    "Acronis Cyber Protect: Resposta a Ransomware",
-    "Banco de Dados Relacionais (MySQL, PostgreSQL)",
-    "Banco de Dados NoSQL (MongoDB)",
-    "Resolução de Problemas e Debugging"
+    "Containers e Orquestração (Docker, Kubernetes)",
+    "IaC (Terraform, Ansible, CloudFormation)",
+    "GCP (Compute, Redes, Serverless)",
+    "AWS (Compute, Redes, Serverless)",
+    "Datadog (Monitoramento, APM, Logs)",
+    "Observabilidade (Prometheus, Grafana, CloudWatch)",
+    "Segurança de Endpoint e Firewall (Sophos)",
+    "Redes (Firewalls, VPNs, Roteamento)",
+    "Backup e Disaster Recovery (Acronis)",
+    "Banco de Dados (SQL e NoSQL)",
+    "Resolução de Problemas e Debugging",
+    "Documentação e Gestão de Incidentes"
 ];
 
 const HARD_SKILLS_DEV = [
@@ -76,25 +68,25 @@ const DISCIPLINAR = [
     "Cumprimento de Prazos",
     "Comunicação",
     "Trabalho em Equipe",
-    "Respeito às Normas"
+    "Respeito aos Processos"
 ];
 
 // Dados da planilha original (serão migrados como Q2-2026)
 const DADOS_PLANILHA = [
-    { nome: "André Novaes", email: "andre.novaes@clouddog.com.br", area: "DEVOPS", hard: [3,2,3,2,3,4,2,2,1,3,2,1,1,1,1,1,1,1,1,1,1,1,2], soft: [4,3,2,4,3,4,3,4,3,3,4,2,4], disciplinar: [4,4,4,3,3,4,4] },
-    { nome: "Bruno Loschi", email: "bruno.loschi@clouddog.com.br", area: "SRE", hard: [3,3,3,1,3,3,3,3,2,3,3,3,1,1,2,1,1,2,1,1,3,1,3], soft: [4,4,3,3,3,3,3,2,3,3,3,3,3], disciplinar: [4,4,4,4,3,4,4] },
-    { nome: "Felipe Vieira", email: "felipe.vieira@clouddog.com.br", area: "SRE", hard: [3,3,1,1,1,3,1,1,1,2,2,3,1,1,2,1,1,1,1,1,3,1,3], soft: [5,4,4,2,4,3,4,2,3,2,3,3,4], disciplinar: [5,5,4,4,3,4,5] },
-    { nome: "Gabriel Abramo", email: "gabriel.abramo@clouddog.com.br", area: "SRE", hard: [5,5,3,5,4,5,1,1,1,4,5,4,3,3,4,1,1,3,1,1,4,2,5], soft: [4,3,5,4,5,4,4,2,4,3,3,4,4], disciplinar: [4,4,5,5,4,4,5] },
-    { nome: "Guilherme Santos", email: "guilherme.santos@clouddog.com.br", area: "SRE", hard: [5,5,3,4,4,4,1,1,1,4,4,4,1,1,3,1,1,3,1,1,4,2,5], soft: [4,4,4,3,3,3,4,3,3,3,4,3,4], disciplinar: [4,4,4,4,4,4,4] },
+    { nome: "André Novaes", email: "andre.novaes@clouddog.com.br", area: "DEVOPS", hard: [3,3,2,3,4,2,3,1,1,1,1,1,1,2,3], soft: [4,3,2,4,3,4,3,4,3,3,4,2,4], disciplinar: [4,4,4,3,3,4,4] },
+    { nome: "Bruno Loschi", email: "bruno.loschi@clouddog.com.br", area: "SRE", hard: [3,3,1,3,3,3,3,1,2,1,2,1,3,3,3], soft: [4,4,3,3,3,3,3,2,3,3,3,3,3], disciplinar: [4,4,4,4,3,4,4] },
+    { nome: "Felipe Vieira", email: "felipe.vieira@clouddog.com.br", area: "SRE", hard: [3,3,1,1,3,1,3,1,2,1,1,1,3,3,3], soft: [5,4,4,2,4,3,4,2,3,2,3,3,4], disciplinar: [5,5,4,4,3,4,5] },
+    { nome: "Gabriel Abramo", email: "gabriel.abramo@clouddog.com.br", area: "SRE", hard: [5,5,5,4,5,1,5,3,4,1,3,1,4,5,3], soft: [4,3,5,4,5,4,4,2,4,3,3,4,4], disciplinar: [4,4,5,5,4,4,5] },
+    { nome: "Guilherme Santos", email: "guilherme.santos@clouddog.com.br", area: "SRE", hard: [5,5,4,4,4,1,4,1,3,1,3,1,4,5,3], soft: [4,4,4,3,3,3,4,3,3,3,4,3,4], disciplinar: [4,4,4,4,4,4,4] },
     { nome: "Gustavo Kowalski", email: "gustavo.kowalski@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
     { nome: "Gustavo Silva", email: "gustavo.silva@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
-    { nome: "Iago Faria", email: "iago.faria@clouddog.com.br", area: "SRE", hard: [3,3,1,3,2,3,1,1,1,3,3,3,1,1,3,2,1,2,1,1,3,1,4], soft: [5,4,2,3,3,4,3,3,3,3,3,3,4], disciplinar: [5,5,4,4,4,5,5] },
-    { nome: "Jefferson Silva", email: "jefferson.silva@clouddog.com.br", area: "DEVOPS", hard: [4,4,4,5,5,5,4,4,4,5,5,5,5,5,4,2,2,3,3,3,4,3,5], soft: [5,5,5,5,5,5,5,4,5,5,5,5,5], disciplinar: [5,5,5,5,5,5,5] },
+    { nome: "Iago Faria", email: "iago.faria@clouddog.com.br", area: "SRE", hard: [3,3,3,2,3,1,3,1,3,2,2,1,3,4,3], soft: [5,4,2,3,3,4,3,3,3,3,3,3,4], disciplinar: [5,5,4,4,4,5,5] },
+    { nome: "Jefferson Silva", email: "jefferson.silva@clouddog.com.br", area: "DEVOPS", hard: [4,4,5,5,5,4,5,5,4,2,3,3,4,5,3], soft: [5,5,5,5,5,5,5,4,5,5,5,5,5], disciplinar: [5,5,5,5,5,5,5] },
     { nome: "João Felipe Bertini", email: "joao.bertini@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
     { nome: "Kayke Peres", email: "kayke.peres@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
     { nome: "Kayky Stiliano", email: "kayky.stiliano@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
-    { nome: "Leonardo Miranda", email: "leonardo.miranda@clouddog.com.br", area: "SRE", hard: [5,5,3,4,3,5,3,3,3,3,4,5,3,3,5,2,2,4,1,1,4,3,5], soft: [3,3,5,3,4,4,4,3,4,4,4,3,4], disciplinar: [4,4,5,4,4,4,4] },
-    { nome: "Lucas Ortiz", email: "lucas.ortiz@clouddog.com.br", area: "SRE", hard: [5,4,2,3,4,4,1,1,1,4,3,4,1,1,3,4,1,2,1,1,4,2,5], soft: [4,4,4,4,4,5,4,4,4,3,4,5,5], disciplinar: [5,5,5,5,4,5,5] },
+    { nome: "Leonardo Miranda", email: "leonardo.miranda@clouddog.com.br", area: "SRE", hard: [5,5,4,3,5,3,5,3,5,2,4,1,4,5,3], soft: [3,3,5,3,4,4,4,3,4,4,4,3,4], disciplinar: [4,4,5,4,4,4,4] },
+    { nome: "Lucas Ortiz", email: "lucas.ortiz@clouddog.com.br", area: "SRE", hard: [5,4,3,4,4,1,4,1,3,4,2,1,4,5,3], soft: [4,4,4,4,4,5,4,4,4,3,4,5,5], disciplinar: [5,5,5,5,4,5,5] },
     { nome: "Lucas Torino", email: "lucas.torino@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null },
     { nome: "Vinicius Rodrigues", email: "vinicius.rodrigues@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null },
     { nome: "Vitor Santana", email: "vitor.santana@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null }

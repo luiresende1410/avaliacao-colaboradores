@@ -105,21 +105,28 @@ function gerarSugestoes(colab, avaliacao) {
 
 function gerarDescricaoMeta(skill, nivelAtual) {
     const acoes = {
-        'Desenvolvimento de Scripts': 'Completar curso de automação e entregar 2 scripts de produção.',
-        'Comandos e Administração Linux': 'Estudar para LPIC-1 e gerenciar ao menos 3 servidores em produção.',
-        'Gerenciamento de Servidores Windows': 'Lab prático de AD + GPO, documentar procedimentos.',
+        'Scripting': 'Completar curso de automação e entregar 2 scripts de produção.',
+        'Administração de Sistemas': 'Estudar para LPIC-1, lab prático de AD + GPO, gerenciar servidores.',
         'Pipelines CI/CD': 'Criar/otimizar 2 pipelines para projetos internos.',
         'Containers': 'Completar curso Docker/K8s e deployar app em cluster.',
-        'Terraform': 'Provisionar infraestrutura completa com módulos reutilizáveis.',
+        'IaC': 'Provisionar infraestrutura completa com módulos reutilizáveis.',
         'GCP': 'Realizar labs GCP e obter certificação Associate Cloud Engineer.',
         'AWS': 'Realizar labs AWS e obter certificação Solutions Architect Associate.',
-        'Datadog': 'Configurar dashboards e alertas para 2 serviços.',
-        'Ferramentas': 'Implementar stack de monitoramento (Prometheus+Grafana) em projeto.',
-        'Sophos': 'Treinamento oficial Sophos e gerenciar políticas de endpoint.',
-        'Conceitos de Redes': 'Estudar networking fundamentals, configurar VPN site-to-site.',
-        'Acronis': 'Implementar plano de backup com testes de restore.',
+        'Datadog': 'Configurar dashboards, alertas e APM para 2 serviços.',
+        'Observabilidade': 'Implementar stack de monitoramento (Prometheus+Grafana) em projeto.',
+        'Segurança de Endpoint': 'Treinamento oficial Sophos e gerenciar políticas de endpoint/firewall.',
+        'Redes': 'Estudar networking fundamentals, configurar VPN site-to-site.',
+        'Backup': 'Implementar plano de backup com testes de restore.',
         'Banco de Dados': 'Realizar curso e administrar instância em produção.',
-        'Resolução de Problemas': 'Liderar troubleshooting de 3 incidentes e documentar root cause.'
+        'Resolução de Problemas': 'Liderar troubleshooting de 3 incidentes e documentar root cause.',
+        'Documentação': 'Documentar 3 runbooks e liderar post-mortem de incidentes.',
+        'Python': 'Completar projeto backend em Python e aplicar boas práticas.',
+        'JavaScript': 'Desenvolver feature completa em JS/TS com testes.',
+        'Frameworks Web': 'Entregar feature usando framework do time com code review aprovado.',
+        'APIs REST': 'Projetar e documentar API seguindo padrões RESTful.',
+        'Testes Automatizados': 'Atingir 80% de cobertura em módulo sob responsabilidade.',
+        'Git': 'Dominar rebase, cherry-pick e resolver conflitos complexos.',
+        'Segurança de Aplicações': 'Completar treinamento OWASP e corrigir 3 vulnerabilidades.'
     };
 
     for (const [key, acao] of Object.entries(acoes)) {
@@ -159,7 +166,7 @@ function gerarDescricaoDisciplinar(skill, nivelAtual) {
         'Cumprimento de Prazos': 'Usar ferramenta de gestão de tarefas e entregar 100% dentro do prazo.',
         'Comunicação': 'Praticar comunicação assertiva em reuniões e documentar decisões por escrito.',
         'Trabalho em Equipe': 'Participar de pair programming semanal e contribuir em code reviews.',
-        'Respeito às Normas': 'Revisar e seguir políticas internas. Reportar impedimentos proativamente.'
+        'Respeito aos Processos': 'Revisar e seguir processos internos. Reportar impedimentos proativamente.'
     };
 
     for (const [key, acao] of Object.entries(acoes)) {

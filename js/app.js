@@ -1,7 +1,7 @@
 // ============================================
 // DADOS INICIAIS DA PLANILHA
 // ============================================
-const HARD_SKILLS = [
+const HARD_SKILLS_SRE = [
     "Desenvolvimento de Scripts (Python, Bash, PowerShell)",
     "Comandos e Administração Linux",
     "Gerenciamento de Servidores Windows (AD, GPO)",
@@ -26,6 +26,32 @@ const HARD_SKILLS = [
     "Banco de Dados NoSQL (MongoDB)",
     "Resolução de Problemas e Debugging"
 ];
+
+const HARD_SKILLS_DEV = [
+    "Python (scripting, backend)",
+    "JavaScript / TypeScript",
+    "Frameworks Web (React, FastAPI, Express, etc.)",
+    "APIs REST e Design de Contratos",
+    "Banco de Dados SQL (modelagem, queries)",
+    "Banco de Dados NoSQL (DynamoDB, MongoDB)",
+    "Testes Automatizados (unitários, integração)",
+    "Git e Estratégias de Branching",
+    "Containers e Docker",
+    "CI/CD (pipelines, deploy automatizado)",
+    "AWS: Serverless (Lambda, API Gateway, Step Functions)",
+    "AWS: Serviços de Aplicação (S3, SQS, SNS, EventBridge)",
+    "Segurança de Aplicações (OWASP, auth, secrets)",
+    "Resolução de Problemas e Debugging"
+];
+
+// Função para obter Hard Skills por área
+function getHardSkills(area) {
+    if (area === 'DEV') return HARD_SKILLS_DEV;
+    return HARD_SKILLS_SRE; // SRE e DEVOPS usam a mesma lista
+}
+
+// Manter compatibilidade — HARD_SKILLS aponta para SRE/DEVOPS por padrão
+const HARD_SKILLS = HARD_SKILLS_SRE;
 
 const SOFT_SKILLS = [
     "Foco no Cliente",
@@ -399,7 +425,8 @@ function preencherFormularioEdicao() {
         document.getElementById('input-email').value = '';
         document.getElementById('input-email').disabled = false;
         document.getElementById('input-area').value = 'SRE';
-        setAllRatings('hard', HARD_SKILLS.length, 3);
+        buildSkillInputs();
+        setAllRatings('hard', getHardSkills('SRE').length, 3);
         setAllRatings('soft', SOFT_SKILLS.length, 3);
         setAllRatings('disc', DISCIPLINAR.length, 3);
         document.getElementById('preview-ninebox').style.display = 'none';
@@ -415,10 +442,16 @@ function preencherFormularioEdicao() {
     document.getElementById('input-email').disabled = true; // Não editar email
     document.getElementById('input-area').value = colab.area;
 
+    // Rebuildar hard skills para a área do colaborador
+    buildSkillInputs();
+
     // Preencher notas do quarter atual (se existirem)
     const avaliacao = getAvaliacaoAtual(email);
     if (avaliacao) {
-        avaliacao.hard.forEach((val, i) => setRatingByValue('hard_' + i, val));
+        const hardSkills = getHardSkills(colab.area);
+        avaliacao.hard.forEach((val, i) => {
+            if (i < hardSkills.length) setRatingByValue('hard_' + i, val);
+        });
         avaliacao.soft.forEach((val, i) => setRatingByValue('soft_' + i, val));
         if (avaliacao.disciplinar) {
             avaliacao.disciplinar.forEach((val, i) => setRatingByValue('disc_' + i, val));
@@ -427,7 +460,7 @@ function preencherFormularioEdicao() {
         }
     } else {
         // Sem avaliação nesse quarter, valores padrão
-        setAllRatings('hard', HARD_SKILLS.length, 1);
+        setAllRatings('hard', getHardSkills(colab.area).length, 1);
         setAllRatings('soft', SOFT_SKILLS.length, 1);
         setAllRatings('disc', DISCIPLINAR.length, 1);
     }
@@ -465,6 +498,7 @@ function setAllRatings(prefix, count, value) {
 // RENDERIZAR RESUMO
 // ============================================
 function renderResumo(colab, avaliacao) {
+    const hardSkills = getHardSkills(colab.area);
     const medHard = calcMediana(avaliacao.hard);
     const medSoft = calcMediana(avaliacao.soft);
     const medDisc = avaliacao.disciplinar ? calcMediana(avaliacao.disciplinar) : null;
@@ -473,7 +507,7 @@ function renderResumo(colab, avaliacao) {
 
     let hardBars = avaliacao.hard.map((val, i) => `
         <div class="skill-bar-container">
-            <span class="skill-bar-label">${HARD_SKILLS[i]}</span>
+            <span class="skill-bar-label">${hardSkills[i] || 'Skill ' + (i+1)}</span>
             <div class="skill-bar">
                 <div class="skill-bar-fill level-${val}"></div>
             </div>
@@ -561,7 +595,7 @@ function renderResumo(colab, avaliacao) {
     `;
 
     // Renderizar gráficos radar
-    renderRadarCharts(avaliacao);
+    renderRadarCharts(avaliacao, colab);
 }
 
 function getNineBoxLabel(row, col) {
@@ -576,11 +610,13 @@ function getNineBoxLabel(row, col) {
 // ============================================
 // GRÁFICOS RADAR (Chart.js)
 // ============================================
-function renderRadarCharts(avaliacao) {
+function renderRadarCharts(avaliacao, colab) {
     // Destruir gráficos anteriores se existirem
     if (window._radarHard) window._radarHard.destroy();
     if (window._radarSoft) window._radarSoft.destroy();
     if (window._radarDisc) window._radarDisc.destroy();
+
+    const hardSkills = getHardSkills(colab.area);
 
     const radarOptions = {
         responsive: true,
@@ -614,7 +650,7 @@ function renderRadarCharts(avaliacao) {
         window._radarHard = new Chart(ctxHard, {
             type: 'radar',
             data: {
-                labels: HARD_SKILLS.map(s => s.length > 25 ? s.substring(0, 23) + '...' : s),
+                labels: hardSkills.map(s => s.length > 25 ? s.substring(0, 23) + '...' : s),
                 datasets: [{
                     label: 'Hard Skills',
                     data: avaliacao.hard,
@@ -678,6 +714,8 @@ function renderRadarCharts(avaliacao) {
 // FORMULÁRIO DE CADASTRO (MELHORADO)
 // ============================================
 function buildSkillInputs() {
+    const area = document.getElementById('input-area').value;
+    const hardSkills = getHardSkills(area);
     const hardContainer = document.getElementById('hardskills-inputs');
     const softContainer = document.getElementById('softskills-inputs');
     const discContainer = document.getElementById('disciplinar-inputs');
@@ -686,7 +724,7 @@ function buildSkillInputs() {
     const softLabels = ['Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
     const discLabels = ['Crítico', 'Abaixo do esperado', 'Adequado', 'Bom', 'Exemplar'];
 
-    hardContainer.innerHTML = HARD_SKILLS.map((skill, i) => `
+    hardContainer.innerHTML = hardSkills.map((skill, i) => `
         <div class="skill-input-card">
             <div class="skill-input-label">${skill}</div>
             <div class="skill-rating" data-target="hard_${i}">
@@ -724,6 +762,11 @@ function buildSkillInputs() {
     `).join('');
 }
 
+// Rebuildar Hard Skills quando a área muda
+document.getElementById('input-area').addEventListener('change', function() {
+    buildSkillInputs();
+});
+
 function setRating(btn) {
     const value = parseInt(btn.dataset.value);
     const container = btn.parentElement;
@@ -751,8 +794,10 @@ function setRating(btn) {
 // Pré-visualizar onde o colaborador cairá no Nine Box
 document.getElementById('btn-preview-avaliacao').addEventListener('click', function() {
     const previewDiv = document.getElementById('preview-ninebox');
+    const area = document.getElementById('input-area').value;
+    const hardSkills = getHardSkills(area);
 
-    const hard = HARD_SKILLS.map((_, i) => {
+    const hard = hardSkills.map((_, i) => {
         const val = parseInt(document.getElementById(`hard_${i}`).value);
         return Math.min(5, Math.max(1, val));
     });
@@ -798,8 +843,9 @@ document.getElementById('form-colaborador').addEventListener('submit', async fun
     const nome = document.getElementById('input-nome').value.trim();
     const email = editandoEmail || document.getElementById('input-email').value.trim();
     const area = document.getElementById('input-area').value;
+    const hardSkills = getHardSkills(area);
 
-    const hard = HARD_SKILLS.map((_, i) => {
+    const hard = hardSkills.map((_, i) => {
         const val = parseInt(document.getElementById(`hard_${i}`).value);
         return Math.min(5, Math.max(1, val));
     });

@@ -4,18 +4,19 @@
 
 function gerarSugestoes(colab, avaliacao) {
     const sugestoes = [];
+    const hardSkills = getHardSkills(colab.area);
 
     if (!avaliacao || !avaliacao.hard || !avaliacao.soft) return sugestoes;
 
     // Identificar Hard Skills com nota ≤ 2 (maiores gaps)
     avaliacao.hard.forEach((val, i) => {
-        if (val <= 2) {
+        if (val <= 2 && hardSkills[i]) {
             sugestoes.push({
                 tipo: 'hard',
-                skill: HARD_SKILLS[i],
+                skill: hardSkills[i],
                 nivelAtual: val,
-                meta: `Elevar "${HARD_SKILLS[i]}" do nível ${val} para pelo menos ${Math.min(val + 2, 5)}`,
-                descricao: gerarDescricaoMeta(HARD_SKILLS[i], val),
+                meta: `Elevar "${hardSkills[i]}" do nível ${val} para pelo menos ${Math.min(val + 2, 5)}`,
+                descricao: gerarDescricaoMeta(hardSkills[i], val),
                 prazo: gerarPrazo(),
                 responsavel: colab.nome,
                 status: 'pendente'
@@ -65,13 +66,13 @@ function gerarSugestoes(colab, avaliacao) {
         if (desempenho < 4) {
             const indexadas = avaliacao.hard.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v);
             indexadas.slice(0, 3).forEach(item => {
-                if (item.v < 4) {
+                if (item.v < 4 && hardSkills[item.i]) {
                     sugestoes.push({
                         tipo: 'hard',
-                        skill: HARD_SKILLS[item.i],
+                        skill: hardSkills[item.i],
                         nivelAtual: item.v,
-                        meta: `Aprimorar "${HARD_SKILLS[item.i]}" do nível ${item.v} para ${Math.min(item.v + 1, 5)}`,
-                        descricao: gerarDescricaoMeta(HARD_SKILLS[item.i], item.v),
+                        meta: `Aprimorar "${hardSkills[item.i]}" do nível ${item.v} para ${Math.min(item.v + 1, 5)}`,
+                        descricao: gerarDescricaoMeta(hardSkills[item.i], item.v),
                         prazo: gerarPrazo(),
                         responsavel: colab.nome,
                         status: 'pendente'

@@ -53,6 +53,7 @@
         <button class="nav-btn" data-section="resumos">Resumo Individual</button>
         <button class="nav-btn" data-section="cadastro">Avaliar Colaborador</button>
         <button class="nav-btn" data-section="plano">Plano de Desenvolvimento</button>
+        <button class="nav-btn" data-section="certificacoes">🎓 Certificações</button>
         <button class="nav-btn" data-section="como-funciona">❓ Como Funciona</button>
     </nav>
 
@@ -292,6 +293,33 @@
                 </button>
             </div>
             <div id="plano-conteudo" class="plano-conteudo"></div>
+        </section>
+
+        <!-- CERTIFICAÇÕES -->
+        <section id="certificacoes" class="section">
+            <div class="certs-page-header">
+                <h2>Certificações por Colaborador</h2>
+                <button class="btn-primary" style="margin:0;" onclick="mostrarFormCertGlobal()">+ Nova Certificação</button>
+            </div>
+            <div id="certs-page-summary" class="certs-page-summary"></div>
+            <div class="certs-page-charts">
+                <div class="cert-chart-card">
+                    <h4>Certificações por Tipo</h4>
+                    <small>Distribuição por provedor/tecnologia</small>
+                    <canvas id="chart-certs-tipo" height="280"></canvas>
+                </div>
+                <div class="cert-chart-card">
+                    <h4>Certificações por Área</h4>
+                    <small>Quantidade por área e tipo</small>
+                    <canvas id="chart-certs-area" height="280"></canvas>
+                </div>
+            </div>
+            <div class="cert-chart-card" style="margin-top:var(--cs-space-l);">
+                <h4>Ranking de Colaboradores</h4>
+                <small>Ordenado por quantidade de certificações</small>
+                <canvas id="chart-certs-ranking" height="300"></canvas>
+            </div>
+            <div id="cert-form-global-container" style="display:none;margin-top:var(--cs-space-l);"></div>
         </section>
 
         <!-- COMO FUNCIONA -->

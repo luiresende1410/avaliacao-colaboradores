@@ -562,6 +562,8 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById(btn.dataset.section).classList.add('active');
+        // Renderizar dashboard de certs ao abrir a aba
+        if (btn.dataset.section === 'certificacoes') renderCertsDashboard();
     });
 });
 
@@ -1200,6 +1202,188 @@ document.getElementById('form-colaborador').addEventListener('submit', async fun
     this.reset();
     buildSkillInputs();
 });
+
+// ============================================
+// CERTIFICAÇÕES - DASHBOARD
+// ============================================
+function renderCertsDashboard() {
+    const certs = CERTIFICACOES_DATA;
+    const totalCerts = certs.length;
+    const colabs = [...new Set(certs.map(c => c.nome))].length;
+
+    // Summary
+    document.getElementById('certs-page-summary').innerHTML = `
+        <span class="certs-page-stat">${totalCerts} certificações — ${colabs} colaboradores</span>
+    `;
+
+    // Destruir gráficos anteriores
+    if (window._chartCertsTipo) window._chartCertsTipo.destroy();
+    if (window._chartCertsArea) window._chartCertsArea.destroy();
+    if (window._chartCertsRanking) window._chartCertsRanking.destroy();
+
+    const tipoColors = { 'AWS': '#FF9900', 'GCP': '#4285F4', 'Terraform': '#7B42BC', 'Datadog': '#632CA6', 'Outro': '#7D8998' };
+
+    // --- Gráfico Doughnut: por Tipo ---
+    const tipos = {};
+    certs.forEach(c => { tipos[c.tipo] = (tipos[c.tipo] || 0) + 1; });
+    const tipoLabels = Object.keys(tipos);
+    const tipoValues = Object.values(tipos);
+    const tipoColorArr = tipoLabels.map(t => tipoColors[t] || '#7D8998');
+
+    const ctxTipo = document.getElementById('chart-certs-tipo');
+    if (ctxTipo) {
+        window._chartCertsTipo = new Chart(ctxTipo, {
+            type: 'doughnut',
+            data: {
+                labels: tipoLabels,
+                datasets: [{ data: tipoValues, backgroundColor: tipoColorArr, borderWidth: 2, borderColor: '#fff' }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 16 } }
+                },
+                cutout: '60%'
+            }
+        });
+    }
+
+    // --- Gráfico Barra Horizontal: por Área ---
+    const areas = {};
+    certs.forEach(c => {
+        const colab = state.colaboradores.find(col => col.nome === c.nome);
+        const area = colab ? colab.area : 'Outro';
+        if (!areas[area]) areas[area] = {};
+        areas[area][c.tipo] = (areas[area][c.tipo] || 0) + 1;
+    });
+    const areaLabels = Object.keys(areas).sort();
+    const allTipos = [...new Set(certs.map(c => c.tipo))].sort();
+
+    const ctxArea = document.getElementById('chart-certs-area');
+    if (ctxArea) {
+        window._chartCertsArea = new Chart(ctxArea, {
+            type: 'bar',
+            data: {
+                labels: areaLabels,
+                datasets: allTipos.map(tipo => ({
+                    label: tipo,
+                    data: areaLabels.map(area => (areas[area] && areas[area][tipo]) || 0),
+                    backgroundColor: tipoColors[tipo] || '#7D8998'
+                }))
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+                scales: {
+                    x: { stacked: true, title: { display: true, text: 'Quantidade' } },
+                    y: { stacked: true }
+                }
+            }
+        });
+    }
+
+    // --- Gráfico Barra: Ranking de Colaboradores ---
+    const porColab = {};
+    certs.forEach(c => { porColab[c.nome] = (porColab[c.nome] || 0) + 1; });
+    const ranking = Object.entries(porColab).sort((a, b) => b[1] - a[1]);
+    const rankingLabels = ranking.map(r => r[0].split(' ').slice(0, 2).join(' '));
+    const rankingValues = ranking.map(r => r[1]);
+
+    const ctxRanking = document.getElementById('chart-certs-ranking');
+    if (ctxRanking) {
+        window._chartCertsRanking = new Chart(ctxRanking, {
+            type: 'bar',
+            data: {
+                labels: rankingLabels,
+                datasets: [{
+                    label: 'Certificações',
+                    data: rankingValues,
+                    backgroundColor: rankingValues.map((_, i) => i < 3 ? '#0972D3' : '#B6BEC9'),
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    }
+}
+
+function mostrarFormCertGlobal() {
+    const container = document.getElementById('cert-form-global-container');
+    const colabOpts = [...state.colaboradores].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+        .map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
+
+    container.style.display = 'block';
+    container.innerHTML = `
+        <div class="cert-form-card">
+            <h4>Adicionar Nova Certificação</h4>
+            <div class="cert-form-row">
+                <div class="form-group" style="flex:2;">
+                    <label>Colaborador</label>
+                    <select id="cert-global-colab">${colabOpts}</select>
+                </div>
+                <div class="form-group">
+                    <label>Provedor</label>
+                    <select id="cert-global-tipo">
+                        <option value="AWS">AWS</option>
+                        <option value="GCP">GCP</option>
+                        <option value="Terraform">Terraform</option>
+                        <option value="Datadog">Datadog</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nível</label>
+                    <select id="cert-global-nivel">
+                        <option value="Foundational">Foundational</option>
+                        <option value="Associate">Associate</option>
+                        <option value="Professional">Professional</option>
+                    </select>
+                </div>
+            </div>
+            <div class="cert-form-row">
+                <div class="form-group" style="flex:2;">
+                    <label>Nome da Certificação</label>
+                    <input type="text" id="cert-global-nome" placeholder="Ex: AWS Certified Solutions Architect Associate">
+                </div>
+                <div class="form-group">
+                    <label>Data Obtida</label>
+                    <input type="date" id="cert-global-data">
+                </div>
+            </div>
+            <div class="cert-form-actions">
+                <button class="btn-primary" style="margin:0;" onclick="submitCertGlobal()">Adicionar</button>
+                <button class="btn-secondary" onclick="document.getElementById('cert-form-global-container').style.display='none'">Cancelar</button>
+            </div>
+        </div>
+    `;
+}
+
+function submitCertGlobal() {
+    const nome = document.getElementById('cert-global-colab').value;
+    const tipo = document.getElementById('cert-global-tipo').value;
+    const nivel = document.getElementById('cert-global-nivel').value;
+    const cert = document.getElementById('cert-global-nome').value.trim();
+    const dataRaw = document.getElementById('cert-global-data').value;
+
+    if (!cert) { showToast("Preencha o nome da certificação", "error"); return; }
+
+    let data = '';
+    if (dataRaw) {
+        const [y, m, d] = dataRaw.split('-');
+        data = `${d}/${m}/${y}`;
+    }
+
+    adicionarCertificacao(nome, tipo, nivel, cert, data);
+    document.getElementById('cert-form-global-container').style.display = 'none';
+    renderCertsDashboard();
+}
 
 // ============================================
 // INIT

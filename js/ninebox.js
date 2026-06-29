@@ -15,7 +15,7 @@ function renderNineBox() {
             if (cell) {
                 const badge = document.createElement('span');
                 badge.className = 'person-badge nao-avaliado';
-                badge.textContent = colab.nome.split(' ')[0];
+                badge.textContent = colab.nome.split(' ').slice(0, 2).join(' ');
                 badge.title = `${colab.nome} - NÃO AVALIADO (${state.currentQuarter})`;
                 cell.appendChild(badge);
             }
@@ -30,7 +30,7 @@ function renderNineBox() {
         if (cell) {
             const badge = document.createElement('span');
             badge.className = 'person-badge';
-            badge.textContent = colab.nome.split(' ')[0];
+            badge.textContent = colab.nome.split(' ').slice(0, 2).join(' ');
             badge.title = `${colab.nome}\nDesempenho: ${desempenho} | Potencial: ${potencial}\nPeríodo: ${state.currentQuarter}`;
             badge.addEventListener('click', () => {
                 // Navegar para resumo

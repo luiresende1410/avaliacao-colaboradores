@@ -30,9 +30,12 @@ const HARD_SKILLS_DEV = [
     "Git e Estratégias de Branching",
     "Containers e Docker",
     "CI/CD (pipelines, deploy automatizado)",
+    "IaC (Terraform, Ansible, CloudFormation)",
     "AWS: Serverless (Lambda, API Gateway, Step Functions)",
     "AWS: Serviços de Aplicação (S3, SQS, SNS, EventBridge)",
     "Segurança de Aplicações (OWASP, auth, secrets)",
+    "IA Generativa",
+    "Machine Learning",
     "Resolução de Problemas e Debugging"
 ];
 

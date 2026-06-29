@@ -34,8 +34,8 @@ const HARD_SKILLS_DEV = [
     "AWS: Serverless (Lambda, API Gateway, Step Functions)",
     "AWS: Serviços de Aplicação (S3, SQS, SNS, EventBridge)",
     "Segurança de Aplicações (OWASP, auth, secrets)",
-    "IA Generativa",
-    "Machine Learning",
+    "IA Generativa (AWS Bedrock, Prompt Engineering)",
+    "Machine Learning (AWS SageMaker)",
     "Resolução de Problemas e Debugging"
 ];
 

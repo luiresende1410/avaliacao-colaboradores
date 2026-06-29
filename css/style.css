@@ -446,6 +446,8 @@ form { background: var(--cs-color-background-container); border-radius: var(--cs
 .rating-btn:hover { transform: scale(1.1); border-color: var(--cs-color-border-input-focused); }
 .rating-btn.active { transform: scale(1.05); box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
 .level-btn-1 { border-color: #FFECEC; }
+.level-btn-0 { border-color: #E9EBED; }
+.level-btn-0.active { background: #7D8998; color: white; border-color: #7D8998; }
 .level-btn-1.active { background: #D91515; color: white; border-color: #D91515; }
 .level-btn-2 { border-color: #FEF8F0; }
 .level-btn-2.active { background: #EC7211; color: white; border-color: #EC7211; }

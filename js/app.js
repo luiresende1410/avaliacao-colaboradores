@@ -76,20 +76,20 @@ const DISCIPLINAR = [
 
 // Dados da planilha original (serão migrados como Q2-2026)
 const DADOS_PLANILHA = [
-    { nome: "André Novaes", email: "andre.novaes@clouddog.com.br", area: "DEVOPS", hard: [3,3,2,3,4,2,3,1,1,1,1,1,1,2,3], soft: [4,3,2,4,3,4,3,4,3,3,4,2,4], disciplinar: [4,4,4,3,3,4,4] },
-    { nome: "Bruno Loschi", email: "bruno.loschi@clouddog.com.br", area: "SRE", hard: [3,3,1,3,3,3,3,1,2,1,2,1,3,3,3], soft: [4,4,3,3,3,3,3,2,3,3,3,3,3], disciplinar: [4,4,4,4,3,4,4] },
-    { nome: "Felipe Vieira", email: "felipe.vieira@clouddog.com.br", area: "SRE", hard: [3,3,1,1,3,1,3,1,2,1,1,1,3,3,3], soft: [5,4,4,2,4,3,4,2,3,2,3,3,4], disciplinar: [5,5,4,4,3,4,5] },
-    { nome: "Gabriel Abramo", email: "gabriel.abramo@clouddog.com.br", area: "SRE", hard: [5,5,5,4,5,1,5,3,4,1,3,1,4,5,3], soft: [4,3,5,4,5,4,4,2,4,3,3,4,4], disciplinar: [4,4,5,5,4,4,5] },
-    { nome: "Guilherme Santos", email: "guilherme.santos@clouddog.com.br", area: "SRE", hard: [5,5,4,4,4,1,4,1,3,1,3,1,4,5,3], soft: [4,4,4,3,3,3,4,3,3,3,4,3,4], disciplinar: [4,4,4,4,4,4,4] },
+    { nome: "André Novaes", email: "andre.novaes@clouddog.com.br", area: "DEVOPS", hard: [3,3,2,3,4,2,3,0,0,0,0,0,0,2,3], soft: [4,3,2,4,3,4,3,4,3,3,4,2,4], disciplinar: [4,4,4,3,3,4,4] },
+    { nome: "Bruno Loschi", email: "bruno.loschi@clouddog.com.br", area: "SRE", hard: [3,3,0,3,3,3,3,0,2,0,2,0,3,3,3], soft: [4,4,3,3,3,3,3,2,3,3,3,3,3], disciplinar: [4,4,4,4,3,4,4] },
+    { nome: "Felipe Vieira", email: "felipe.vieira@clouddog.com.br", area: "SRE", hard: [3,3,0,0,3,0,3,0,2,0,0,0,3,3,3], soft: [5,4,4,2,4,3,4,2,3,2,3,3,4], disciplinar: [5,5,4,4,3,4,5] },
+    { nome: "Gabriel Abramo", email: "gabriel.abramo@clouddog.com.br", area: "SRE", hard: [5,5,5,4,5,0,5,3,4,0,3,0,4,5,3], soft: [4,3,5,4,5,4,4,2,4,3,3,4,4], disciplinar: [4,4,5,5,4,4,5] },
+    { nome: "Guilherme Santos", email: "guilherme.santos@clouddog.com.br", area: "SRE", hard: [5,5,4,4,4,0,4,0,3,0,3,0,4,5,3], soft: [4,4,4,3,3,3,4,3,3,3,4,3,4], disciplinar: [4,4,4,4,4,4,4] },
     { nome: "Gustavo Kowalski", email: "gustavo.kowalski@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
     { nome: "Gustavo Silva", email: "gustavo.silva@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
-    { nome: "Iago Faria", email: "iago.faria@clouddog.com.br", area: "SRE", hard: [3,3,3,2,3,1,3,1,3,2,2,1,3,4,3], soft: [5,4,2,3,3,4,3,3,3,3,3,3,4], disciplinar: [5,5,4,4,4,5,5] },
+    { nome: "Iago Faria", email: "iago.faria@clouddog.com.br", area: "SRE", hard: [3,3,3,2,3,0,3,0,3,2,2,0,3,4,3], soft: [5,4,2,3,3,4,3,3,3,3,3,3,4], disciplinar: [5,5,4,4,4,5,5] },
     { nome: "Jefferson Silva", email: "jefferson.silva@clouddog.com.br", area: "DEVOPS", hard: [4,4,5,5,5,4,5,5,4,2,3,3,4,5,3], soft: [5,5,5,5,5,5,5,4,5,5,5,5,5], disciplinar: [5,5,5,5,5,5,5] },
     { nome: "João Felipe Bertini", email: "joao.bertini@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
     { nome: "Kayke Peres", email: "kayke.peres@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
     { nome: "Kayky Stiliano", email: "kayky.stiliano@clouddog.com.br", area: "DEVOPS", hard: null, soft: null, disciplinar: null },
-    { nome: "Leonardo Miranda", email: "leonardo.miranda@clouddog.com.br", area: "SRE", hard: [5,5,4,3,5,3,5,3,5,2,4,1,4,5,3], soft: [3,3,5,3,4,4,4,3,4,4,4,3,4], disciplinar: [4,4,5,4,4,4,4] },
-    { nome: "Lucas Ortiz", email: "lucas.ortiz@clouddog.com.br", area: "SRE", hard: [5,4,3,4,4,1,4,1,3,4,2,1,4,5,3], soft: [4,4,4,4,4,5,4,4,4,3,4,5,5], disciplinar: [5,5,5,5,4,5,5] },
+    { nome: "Leonardo Miranda", email: "leonardo.miranda@clouddog.com.br", area: "SRE", hard: [5,5,4,3,5,3,5,3,5,2,4,0,4,5,3], soft: [3,3,5,3,4,4,4,3,4,4,4,3,4], disciplinar: [4,4,5,4,4,4,4] },
+    { nome: "Lucas Ortiz", email: "lucas.ortiz@clouddog.com.br", area: "SRE", hard: [5,4,3,4,4,0,4,0,3,4,2,0,4,5,3], soft: [4,4,4,4,4,5,4,4,4,3,4,5,5], disciplinar: [5,5,5,5,4,5,5] },
     { nome: "Lucas Torino", email: "lucas.torino@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null },
     { nome: "Vinicius Rodrigues", email: "vinicius.rodrigues@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null },
     { nome: "Vitor Santana", email: "vitor.santana@clouddog.com.br", area: "SRE", hard: null, soft: null, disciplinar: null }
@@ -177,7 +177,7 @@ function calcPotencial(avaliacao) {
 
 function getLevelLabel(val, type) {
     if (type === 'hard') {
-        const labels = { 1: 'Sem conhecimento', 2: 'Baixo', 3: 'Bom', 4: 'Ótimo', 5: 'Especialista' };
+        const labels = { 0: 'Sem conhecimento', 1: 'Básico', 2: 'Baixo', 3: 'Bom', 4: 'Ótimo', 5: 'Especialista' };
         return labels[val] || '-';
     } else if (type === 'disciplinar') {
         const labels = { 1: 'Crítico', 2: 'Abaixo do esperado', 3: 'Adequado', 4: 'Bom', 5: 'Exemplar' };
@@ -475,11 +475,11 @@ function setRatingByValue(targetId, value) {
     const labelEl = document.getElementById(`${targetId}_label`);
     if (labelEl) {
         const labels = targetId.startsWith('hard_')
-            ? ['Sem conhecimento', 'Baixo', 'Bom', 'Ótimo', 'Especialista']
+            ? ['Sem conhecimento', 'Básico', 'Baixo', 'Bom', 'Ótimo', 'Especialista']
             : targetId.startsWith('disc_')
                 ? ['Crítico', 'Abaixo do esperado', 'Adequado', 'Bom', 'Exemplar']
                 : ['Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
-        labelEl.textContent = labels[value - 1];
+        labelEl.textContent = targetId.startsWith('hard_') ? labels[value] : labels[value - 1];
     }
 }
 
@@ -800,7 +800,7 @@ function buildSkillInputs() {
     const softContainer = document.getElementById('softskills-inputs');
     const discContainer = document.getElementById('disciplinar-inputs');
 
-    const hardLabels = ['Sem conhecimento', 'Baixo', 'Bom', 'Ótimo', 'Especialista'];
+    const hardLabels = ['Sem conhecimento', 'Básico', 'Baixo', 'Bom', 'Ótimo', 'Especialista'];
     const softLabels = ['Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
     const discLabels = ['Crítico', 'Abaixo do esperado', 'Adequado', 'Bom', 'Exemplar'];
 
@@ -808,10 +808,10 @@ function buildSkillInputs() {
         <div class="skill-input-card">
             <div class="skill-input-label">${skill}</div>
             <div class="skill-rating" data-target="hard_${i}">
-                ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 3 ? ' active' : ''}" data-value="${v}" title="${hardLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
+                ${[0,1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 3 ? ' active' : ''}" data-value="${v}" title="${hardLabels[v]}" onclick="setRating(this)">${v}</button>`).join('')}
             </div>
             <input type="hidden" id="hard_${i}" name="hard_${i}" value="3">
-            <span class="rating-label" id="hard_${i}_label">${hardLabels[2]}</span>
+            <span class="rating-label" id="hard_${i}_label">${hardLabels[3]}</span>
         </div>
     `).join('');
 
@@ -863,11 +863,11 @@ function setRating(btn) {
     const labelEl = document.getElementById(`${targetId}_label`);
     if (labelEl) {
         const labels = targetId.startsWith('hard_')
-            ? ['Sem conhecimento', 'Baixo', 'Bom', 'Ótimo', 'Especialista']
+            ? ['Sem conhecimento', 'Básico', 'Baixo', 'Bom', 'Ótimo', 'Especialista']
             : targetId.startsWith('disc_')
                 ? ['Crítico', 'Abaixo do esperado', 'Adequado', 'Bom', 'Exemplar']
                 : ['Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
-        labelEl.textContent = labels[value - 1];
+        labelEl.textContent = targetId.startsWith('hard_') ? labels[value] : labels[value - 1];
     }
 }
 
@@ -879,7 +879,7 @@ document.getElementById('btn-preview-avaliacao').addEventListener('click', funct
 
     const hard = hardSkills.map((_, i) => {
         const val = parseInt(document.getElementById(`hard_${i}`).value);
-        return Math.min(5, Math.max(1, val));
+        return Math.min(5, Math.max(0, val));
     });
 
     const soft = SOFT_SKILLS.map((_, i) => {
@@ -927,7 +927,7 @@ document.getElementById('form-colaborador').addEventListener('submit', async fun
 
     const hard = hardSkills.map((_, i) => {
         const val = parseInt(document.getElementById(`hard_${i}`).value);
-        return Math.min(5, Math.max(1, val));
+        return Math.min(5, Math.max(0, val));
     });
 
     const soft = SOFT_SKILLS.map((_, i) => {

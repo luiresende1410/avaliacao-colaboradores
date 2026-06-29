@@ -161,7 +161,7 @@ function gerarDescricaoSoft(skill, nivelAtual) {
 function gerarDescricaoDisciplinar(skill, nivelAtual) {
     const acoes = {
         'Pontualidade': 'Manter registro de horários e reduzir atrasos a zero no próximo mês.',
-        'Assiduidade': 'Reduzir faltas não justificadas. Comunicar ausências com antecedência.',
+        'Participativo': 'Participar ativamente de reuniões, cerimônias e iniciativas do time.',
         'Postura Profissional': 'Participar de workshop de comunicação profissional e aplicar no dia a dia.',
         'Cumprimento de Prazos': 'Usar ferramenta de gestão de tarefas e entregar 100% dentro do prazo.',
         'Comunicação': 'Praticar comunicação assertiva em reuniões e documentar decisões por escrito.',

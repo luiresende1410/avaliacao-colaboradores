@@ -441,6 +441,7 @@ form { background: var(--cs-color-background-container); border-radius: var(--cs
 .skill-input-card { display: flex; flex-direction: column; gap: var(--cs-space-xxs); padding: var(--cs-space-s) var(--cs-space-m); background: var(--cs-color-background-container); border: 1px solid var(--cs-color-border-container); border-radius: var(--cs-border-radius); transition: var(--cs-transition); }
 .skill-input-card:hover { border-color: var(--cs-color-border-input-focused); box-shadow: var(--cs-shadow-container); }
 .skill-input-label { font-size: var(--cs-font-size-small); font-weight: var(--cs-font-weight-bold); color: var(--cs-color-text-heading); }
+.skill-input-desc { font-size: 11px; color: var(--cs-color-text-body-secondary); font-style: italic; margin-bottom: 2px; }
 .skill-rating { display: flex; gap: 4px; }
 .rating-btn { width: 36px; height: 28px; border: 1px solid var(--cs-color-border-container); border-radius: var(--cs-border-radius-badge); font-size: var(--cs-font-size-small); font-weight: var(--cs-font-weight-bold); cursor: pointer; transition: var(--cs-transition); background: var(--cs-color-background-container); color: var(--cs-color-text-body-secondary); }
 .rating-btn:hover { transform: scale(1.1); border-color: var(--cs-color-border-input-focused); }

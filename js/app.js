@@ -64,9 +64,35 @@ const SOFT_SKILLS = [
     "Orientação a Resultados"
 ];
 
+const SOFT_SKILLS_DESC = [
+    "Prioriza as necessidades do cliente nas decisões",
+    "Age como dono do resultado, vai além do esperado",
+    "Propõe melhorias e simplifica processos",
+    "Decide com agilidade mesmo com informações incompletas",
+    "Busca aprender constantemente e se atualizar",
+    "Entrega com qualidade e atenção aos detalhes",
+    "Pensa no longo prazo e impacto das ações",
+    "Antecipa problemas e age sem esperar ser cobrado",
+    "Usa bem tempo, dinheiro e ferramentas disponíveis",
+    "É transparente, cumpre o que promete",
+    "Analisa dados e contexto antes de agir",
+    "Comunica com clareza e colabora com o time",
+    "Foca em entregar resultados concretos"
+];
+
+const DISCIPLINAR_DESC = [
+    "Cumpre horários e compromissos de agenda",
+    "Participa ativamente de reuniões e iniciativas do time",
+    "Mantém conduta profissional adequada ao ambiente",
+    "Entrega tarefas dentro do prazo combinado",
+    "Comunica de forma clara e no tempo certo",
+    "Colabora e apoia colegas quando necessário",
+    "Segue processos e fluxos definidos pelo time"
+];
+
 const DISCIPLINAR = [
     "Pontualidade",
-    "Assiduidade",
+    "Participativo",
     "Postura Profissional",
     "Cumprimento de Prazos",
     "Comunicação",
@@ -1083,6 +1109,7 @@ function buildSkillInputs() {
         return `
         <div class="skill-input-card">
             <div class="skill-input-label">${skill} ${tag}</div>
+            <div class="skill-input-desc">${SOFT_SKILLS_DESC[i]}</div>
             <div class="skill-rating" data-target="soft_${i}">
                 ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 1 ? ' active' : ''}" data-value="${v}" title="${softLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
             </div>
@@ -1094,6 +1121,7 @@ function buildSkillInputs() {
     discContainer.innerHTML = DISCIPLINAR.map((skill, i) => `
         <div class="skill-input-card">
             <div class="skill-input-label">${skill}</div>
+            <div class="skill-input-desc">${DISCIPLINAR_DESC[i]}</div>
             <div class="skill-rating" data-target="disc_${i}">
                 ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 1 ? ' active' : ''}" data-value="${v}" title="${discLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
             </div>

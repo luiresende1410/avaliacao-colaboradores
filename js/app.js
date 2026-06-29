@@ -547,8 +547,9 @@ function popularSelects() {
 }
 
 function popularSelectCadastro() {
-    // Todos os colaboradores para edição
-    const opts = state.colaboradores.map(c => `<option value="${c.email}">${c.nome} (${c.area})</option>`).join('');
+    // Todos os colaboradores para edição, em ordem alfabética
+    const sorted = [...state.colaboradores].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    const opts = sorted.map(c => `<option value="${c.email}">${c.nome} (${c.area})</option>`).join('');
     document.getElementById('editar-colaborador-select').innerHTML = '<option value="">-- Novo colaborador --</option>' + opts;
 }
 
@@ -621,9 +622,9 @@ function preencherFormularioEdicao() {
         document.getElementById('input-email').disabled = false;
         document.getElementById('input-area').value = 'SRE';
         buildSkillInputs();
-        setAllRatings('hard', getHardSkills('SRE').length, 3);
-        setAllRatings('soft', SOFT_SKILLS.length, 3);
-        setAllRatings('disc', DISCIPLINAR.length, 3);
+        setAllRatings('hard', getHardSkills('SRE').length, 0);
+        setAllRatings('soft', SOFT_SKILLS.length, 1);
+        setAllRatings('disc', DISCIPLINAR.length, 1);
         document.getElementById('preview-ninebox').style.display = 'none';
         return;
     }
@@ -1060,10 +1061,10 @@ function buildSkillInputs() {
         <div class="skill-input-card">
             <div class="skill-input-label">${skill}</div>
             <div class="skill-rating" data-target="hard_${i}">
-                ${[0,1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 3 ? ' active' : ''}" data-value="${v}" title="${hardLabels[v]}" onclick="setRating(this)">${v}</button>`).join('')}
+                ${[0,1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 0 ? ' active' : ''}" data-value="${v}" title="${hardLabels[v]}" onclick="setRating(this)">${v}</button>`).join('')}
             </div>
-            <input type="hidden" id="hard_${i}" name="hard_${i}" value="3">
-            <span class="rating-label" id="hard_${i}_label">${hardLabels[3]}</span>
+            <input type="hidden" id="hard_${i}" name="hard_${i}" value="0">
+            <span class="rating-label" id="hard_${i}_label">${hardLabels[0]}</span>
         </div>
     `).join('');
 
@@ -1075,10 +1076,10 @@ function buildSkillInputs() {
         <div class="skill-input-card">
             <div class="skill-input-label">${skill} ${tag}</div>
             <div class="skill-rating" data-target="soft_${i}">
-                ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 3 ? ' active' : ''}" data-value="${v}" title="${softLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
+                ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 1 ? ' active' : ''}" data-value="${v}" title="${softLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
             </div>
-            <input type="hidden" id="soft_${i}" name="soft_${i}" value="3">
-            <span class="rating-label" id="soft_${i}_label">${softLabels[2]}</span>
+            <input type="hidden" id="soft_${i}" name="soft_${i}" value="1">
+            <span class="rating-label" id="soft_${i}_label">${softLabels[0]}</span>
         </div>
     `}).join('');
 
@@ -1086,10 +1087,10 @@ function buildSkillInputs() {
         <div class="skill-input-card">
             <div class="skill-input-label">${skill}</div>
             <div class="skill-rating" data-target="disc_${i}">
-                ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 3 ? ' active' : ''}" data-value="${v}" title="${discLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
+                ${[1,2,3,4,5].map(v => `<button type="button" class="rating-btn level-btn-${v}${v === 1 ? ' active' : ''}" data-value="${v}" title="${discLabels[v-1]}" onclick="setRating(this)">${v}</button>`).join('')}
             </div>
-            <input type="hidden" id="disc_${i}" name="disc_${i}" value="3">
-            <span class="rating-label" id="disc_${i}_label">${discLabels[2]}</span>
+            <input type="hidden" id="disc_${i}" name="disc_${i}" value="1">
+            <span class="rating-label" id="disc_${i}_label">${discLabels[0]}</span>
         </div>
     `).join('');
 }

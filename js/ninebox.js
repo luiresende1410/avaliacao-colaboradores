@@ -22,7 +22,7 @@ function renderNineBox() {
             return;
         }
 
-        const desempenho = calcDesempenho(avaliacao);
+        const desempenho = calcDesempenho(avaliacao, colab.nome);
         const potencial = calcPotencial(avaliacao);
         const { row, col } = getNineBoxPos(desempenho, potencial);
 

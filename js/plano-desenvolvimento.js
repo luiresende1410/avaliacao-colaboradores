@@ -60,7 +60,7 @@ function gerarSugestoes(colab, avaliacao) {
 
     // Se não há gaps críticos, sugerir evolução das medianas
     if (sugestoes.length === 0) {
-        const desempenho = calcDesempenho(avaliacao);
+        const desempenho = calcDesempenho(avaliacao, colab.nome);
         const potencial = calcPotencial(avaliacao);
 
         if (desempenho < 4) {
@@ -202,7 +202,7 @@ function renderPlano(colab, avaliacao) {
 
 function renderPlanoComDados(colab, avaliacao, metas) {
     const container = document.getElementById('plano-conteudo');
-    const desempenho = calcDesempenho(avaliacao);
+    const desempenho = calcDesempenho(avaliacao, colab.nome);
     const potencial = calcPotencial(avaliacao);
     const { row, col } = getNineBoxPos(desempenho, potencial);
     const nineBoxLabel = getNineBoxLabel(row, col);

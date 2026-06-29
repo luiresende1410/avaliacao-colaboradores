@@ -468,6 +468,22 @@ form { background: var(--cs-color-background-container); border-radius: var(--cs
 .preview-valores { display: flex; gap: var(--cs-space-l); font-size: var(--cs-font-size-body); }
 .preview-valores strong { color: var(--cd-accent); }
 
+/* === CERTIFICAÇÕES === */
+.certs-section { margin-top: var(--cs-space-xl); padding-top: var(--cs-space-l); border-top: 1px solid var(--cs-color-border-divider); }
+.certs-summary { display: flex; gap: var(--cs-space-m); margin-bottom: var(--cs-space-l); flex-wrap: wrap; }
+.cert-stat { background: var(--cs-color-background-layout-panel); border-radius: var(--cs-border-radius); padding: var(--cs-space-s) var(--cs-space-m); text-align: center; min-width: 80px; border: 1px solid var(--cs-color-border-container); }
+.cert-stat strong { display: block; font-size: var(--cs-font-size-heading-m); color: var(--cs-color-text-heading); }
+.cert-stat small { font-size: 10px; color: var(--cs-color-text-body-secondary); }
+.certs-grid { display: flex; flex-wrap: wrap; gap: var(--cs-space-xs); }
+.cert-badge { display: inline-flex; align-items: center; gap: 0; border: 1px solid #ddd; border-radius: var(--cs-border-radius-button); overflow: hidden; font-size: 11px; transition: var(--cs-transition); }
+.cert-badge:hover { box-shadow: var(--cs-shadow-container); transform: translateY(-1px); }
+.cert-tipo { padding: 4px 8px; color: white; font-weight: var(--cs-font-weight-bold); font-size: 10px; }
+.cert-nome { padding: 4px 8px; color: var(--cs-color-text-body-default); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cert-nivel { padding: 4px 8px; font-weight: var(--cs-font-weight-bold); font-size: 10px; }
+.cert-nivel.nivel-foundational { background: var(--cs-color-background-layout-panel); color: var(--cs-color-text-body-secondary); }
+.cert-nivel.nivel-associate { background: var(--cs-color-background-status-info); color: var(--cs-color-text-status-info); }
+.cert-nivel.nivel-professional { background: var(--cs-color-background-status-success); color: var(--cs-color-text-status-success); }
+
 /* === SOFT SKILL CLASSIFICATION TAGS === */
 .tag-potencial { display: inline-block; background: var(--cs-color-background-status-info); color: var(--cs-color-text-status-info); font-size: 10px; font-weight: var(--cs-font-weight-bold); padding: 1px 6px; border-radius: var(--cs-border-radius-badge); margin-left: 4px; vertical-align: middle; }
 .tag-execucao { display: inline-block; background: var(--cs-color-background-status-warning); color: var(--cs-color-text-status-warning); font-size: 10px; font-weight: var(--cs-font-weight-bold); padding: 1px 6px; border-radius: var(--cs-border-radius-badge); margin-left: 4px; vertical-align: middle; }

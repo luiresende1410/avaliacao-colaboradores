@@ -99,8 +99,85 @@ const DADOS_PLANILHA = [
 const state = {
     colaboradores: [],   // Lista de perfis (nome, email, area)
     avaliacoes: [],      // Lista de avaliações com quarter
+    certificacoes: [],   // Lista de certificações por colaborador
     currentQuarter: "Q2-2026"
 };
+
+// ============================================
+// CERTIFICAÇÕES
+// ============================================
+const CERTIFICACOES_DATA = [
+    { nome: "André Novaes", tipo: "AWS", nivel: "Foundational", cert: "AWS Cloud Practitioner", data: "" },
+    { nome: "André Novaes", tipo: "AWS", nivel: "Associate", cert: "AWS Solutions Architect Associate", data: "" },
+    { nome: "André Novaes", tipo: "AWS", nivel: "Professional", cert: "AWS Solutions Architect Professional", data: "17/05/2026" },
+    { nome: "Bruno Loschi", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "14/11/2025" },
+    { nome: "Bruno Loschi", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Cloud Ops Engineer", data: "27/03/2026" },
+    { nome: "Felipe Vieira", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "20/06/2025" },
+    { nome: "Felipe Vieira", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Developer Associate", data: "18/10/2025" },
+    { nome: "Felipe Vieira", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified AI Practitioner", data: "" },
+    { nome: "Felipe Vieira", tipo: "AWS", nivel: "Associate", cert: "Solutions Architect Associate", data: "" },
+    { nome: "Gabriel Abramo", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "02/10/2023" },
+    { nome: "Gabriel Abramo", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Solutions Architect Associate", data: "30/01/2024" },
+    { nome: "Gabriel Abramo", tipo: "AWS", nivel: "Professional", cert: "AWS Certified Solutions Architect Professional", data: "31/08/2024" },
+    { nome: "Gabriel Abramo", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Developer Associate", data: "18/09/2025" },
+    { nome: "Guilherme Santos", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "23/03/2024" },
+    { nome: "Guilherme Santos", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Solutions Architect Associate", data: "10/08/2024" },
+    { nome: "Guilherme Santos", tipo: "AWS", nivel: "Professional", cert: "AWS Certified Solutions Architect Professional", data: "14/03/2025" },
+    { nome: "Gustavo Kowalski", tipo: "AWS", nivel: "Associate", cert: "AWS Solutions Architect Associate", data: "18/05/2026" },
+    { nome: "Gustavo Silva", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "26/02/2024" },
+    { nome: "Gustavo Silva", tipo: "AWS", nivel: "Associate", cert: "AWS Certified SysOps Administrator Associate", data: "25/05/2024" },
+    { nome: "Gustavo Silva", tipo: "AWS", nivel: "Professional", cert: "AWS Certified DevOps Engineer Professional", data: "31/08/2024" },
+    { nome: "Gustavo Silva", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Solutions Architect Associate", data: "26/07/2025" },
+    { nome: "Gustavo Silva", tipo: "GCP", nivel: "Associate", cert: "Google Cloud Associate Cloud Engineer", data: "01/11/2025" },
+    { nome: "Gustavo Silva", tipo: "GCP", nivel: "Professional", cert: "Google Cloud Professional Cloud Architect", data: "02/03/2026" },
+    { nome: "Gustavo Silva", tipo: "Datadog", nivel: "Foundational", cert: "Datadog Fundamentals", data: "29/03/2026" },
+    { nome: "Gustavo Silva", tipo: "Terraform", nivel: "Associate", cert: "HashiCorp Terraform Associate", data: "01/05/2025" },
+    { nome: "Iago Faria", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "14/11/2025" },
+    { nome: "Iago Faria", tipo: "AWS", nivel: "Associate", cert: "AWS CloudOps Engineer Associate", data: "14/06/2026" },
+    { nome: "Iago Faria", tipo: "Outro", nivel: "Foundational", cert: "Sophos Endpoint v6.0 Engineer", data: "17/03/2026" },
+    { nome: "Iago Faria", tipo: "Outro", nivel: "Foundational", cert: "Sophos Central Endpoint v6.0 Architect", data: "20/03/2026" },
+    { nome: "Jefferson Silva", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "28/11/2022" },
+    { nome: "Jefferson Silva", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Solutions Architect Associate", data: "09/04/2023" },
+    { nome: "Jefferson Silva", tipo: "AWS", nivel: "Professional", cert: "AWS Certified Solutions Architect Professional", data: "09/11/2023" },
+    { nome: "Jefferson Silva", tipo: "GCP", nivel: "Professional", cert: "Professional Cloud Architect", data: "" },
+    { nome: "Jefferson Silva", tipo: "GCP", nivel: "Associate", cert: "GCP Associate Cloud Engineer", data: "" },
+    { nome: "João Felipe Bertini", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "21/02/2026" },
+    { nome: "João Felipe Bertini", tipo: "Datadog", nivel: "Foundational", cert: "Datadog Fundamental Certification", data: "23/05/2026" },
+    { nome: "Kayke Peres", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "19/11/2025" },
+    { nome: "Kayke Peres", tipo: "AWS", nivel: "Associate", cert: "AWS Solutions Architect Associate", data: "05/04/2025" },
+    { nome: "Kayky Stiliano", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "05/03/2026" },
+    { nome: "Leonardo Miranda", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "20/09/2023" },
+    { nome: "Leonardo Miranda", tipo: "AWS", nivel: "Associate", cert: "AWS Certified SysOps Administrator Associate", data: "16/12/2023" },
+    { nome: "Leonardo Miranda", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Developer Associate", data: "02/03/2024" },
+    { nome: "Leonardo Miranda", tipo: "AWS", nivel: "Professional", cert: "AWS Certified DevOps Engineer Professional", data: "25/03/2024" },
+    { nome: "Leonardo Miranda", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Solutions Architect Associate", data: "02/08/2025" },
+    { nome: "Lucas Ortiz", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "16/10/2024" },
+    { nome: "Lucas Ortiz", tipo: "AWS", nivel: "Associate", cert: "AWS Certified SysOps Administrator Associate", data: "04/02/2025" },
+    { nome: "Lucas Ortiz", tipo: "AWS", nivel: "Professional", cert: "AWS Certified DevOps Engineer Professional", data: "29/10/2025" },
+    { nome: "Lucas Ortiz", tipo: "Outro", nivel: "Foundational", cert: "Sophos Endpoint v6.0 Engineer", data: "17/03/2026" },
+    { nome: "Lucas Torino", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "16/07/2022" },
+    { nome: "Lucas Torino", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Developer Associate", data: "" },
+    { nome: "Lucas Torino", tipo: "AWS", nivel: "Professional", cert: "AWS Certified DevOps Engineer Professional", data: "21/04/2024" },
+    { nome: "Vinicius Rodrigues", tipo: "AWS", nivel: "Foundational", cert: "AWS Cloud Practitioner", data: "19/05/2026" },
+    { nome: "Vitor Santana", tipo: "AWS", nivel: "Associate", cert: "AWS Certified Solutions Architect Associate", data: "17/10/2025" },
+    { nome: "Vitor Santana", tipo: "AWS", nivel: "Foundational", cert: "AWS Certified Cloud Practitioner", data: "20/03/2025" },
+    { nome: "Vitor Santana", tipo: "AWS", nivel: "Professional", cert: "AWS Certified Solutions Architect Professional", data: "30/10/2025" }
+];
+
+// Bônus de certificação por nível (adicionado ao desempenho)
+const CERT_BONUS = { 'Foundational': 0.05, 'Associate': 0.10, 'Professional': 0.15 };
+
+function getCertificacoes(nome) {
+    return CERTIFICACOES_DATA.filter(c => c.nome === nome);
+}
+
+function calcBonusCertificacoes(nome) {
+    const certs = getCertificacoes(nome);
+    if (certs.length === 0) return 0;
+    const bonus = certs.reduce((sum, c) => sum + (CERT_BONUS[c.nivel] || 0), 0);
+    // Cap máximo de 0.5 para não distorcer demais
+    return Math.min(bonus, 0.5);
+}
 
 // ============================================
 // CLASSIFICAÇÃO DAS SOFT SKILLS
@@ -147,21 +224,27 @@ function calcMediana(arr) {
  *   - Mediana Hard Skills (40%)
  *   - Mediana Disciplinar (30%)
  *   - Mediana Soft Skills de execução (30%)
+ *   + Bônus de certificações (máx 0.5)
  */
-function calcDesempenho(avaliacao) {
+function calcDesempenho(avaliacao, nomeColab) {
     if (!avaliacao || !avaliacao.hard || !avaliacao.soft) return null;
 
     const medHard = calcMediana(avaliacao.hard);
     const softExecucao = SOFT_EXECUCAO_INDICES.map(i => avaliacao.soft[i]);
     const medSoftExec = calcMediana(softExecucao);
 
-    // Se não tem disciplinar, redistribui o peso entre hard e soft execução
+    let base;
     if (!avaliacao.disciplinar) {
-        return Math.round(((medHard * 0.55) + (medSoftExec * 0.45)) * 100) / 100;
+        base = (medHard * 0.55) + (medSoftExec * 0.45);
+    } else {
+        const medDisc = calcMediana(avaliacao.disciplinar);
+        base = (medHard * PESO_HARD) + (medDisc * PESO_DISCIPLINAR) + (medSoftExec * PESO_SOFT_EXECUCAO);
     }
 
-    const medDisc = calcMediana(avaliacao.disciplinar);
-    return Math.round(((medHard * PESO_HARD) + (medDisc * PESO_DISCIPLINAR) + (medSoftExec * PESO_SOFT_EXECUCAO)) * 100) / 100;
+    // Adicionar bônus de certificações
+    const bonus = nomeColab ? calcBonusCertificacoes(nomeColab) : 0;
+    const resultado = Math.min(5, base + bonus);
+    return Math.round(resultado * 100) / 100;
 }
 
 /**
@@ -497,7 +580,7 @@ function renderResumo(colab, avaliacao) {
     const medHard = calcMediana(avaliacao.hard);
     const medSoft = calcMediana(avaliacao.soft);
     const medDisc = avaliacao.disciplinar ? calcMediana(avaliacao.disciplinar) : null;
-    const desempenho = calcDesempenho(avaliacao);
+    const desempenho = calcDesempenho(avaliacao, colab.nome);
     const potencial = calcPotencial(avaliacao);
 
     let hardBars = avaliacao.hard.map((val, i) => `
@@ -587,6 +670,8 @@ function renderResumo(colab, avaliacao) {
             <h4>Avaliação Disciplinar</h4>
             ${discBars}
         </div>` : ''}
+
+        ${renderCertificacoesHTML(colab.nome)}
     `;
 
     // Renderizar gráficos radar
@@ -600,6 +685,47 @@ function getNineBoxLabel(row, col) {
         '1-1': 'Insuficiente', '1-2': 'Eficaz', '1-3': 'Comprometido'
     };
     return labels[`${row}-${col}`] || '-';
+}
+
+// ============================================
+// CERTIFICAÇÕES - RENDER
+// ============================================
+function renderCertificacoesHTML(nome) {
+    const certs = getCertificacoes(nome);
+    if (certs.length === 0) return '<div class="skills-section"><h4>🎓 Certificações</h4><p style="color:var(--cs-color-text-body-secondary);font-size:var(--cs-font-size-small);">Nenhuma certificação registrada.</p></div>';
+
+    const totalEmpresa = CERTIFICACOES_DATA.length;
+    const colabsComCert = [...new Set(CERTIFICACOES_DATA.map(c => c.nome))].length;
+    const mediaEmpresa = (totalEmpresa / colabsComCert).toFixed(1);
+
+    const countFoundational = certs.filter(c => c.nivel === 'Foundational').length;
+    const countAssociate = certs.filter(c => c.nivel === 'Associate').length;
+    const countProfessional = certs.filter(c => c.nivel === 'Professional').length;
+    const bonus = calcBonusCertificacoes(nome);
+
+    const tipoColors = { 'AWS': '#FF9900', 'GCP': '#4285F4', 'Terraform': '#7B42BC', 'Datadog': '#632CA6', 'Outro': '#7D8998' };
+
+    const badgesHTML = certs.map(c => {
+        const color = tipoColors[c.tipo] || '#7D8998';
+        return `<span class="cert-badge" style="border-color:${color};"><span class="cert-tipo" style="background:${color};">${c.tipo}</span><span class="cert-nome">${c.cert}</span><span class="cert-nivel nivel-${c.nivel.toLowerCase()}">${c.nivel}</span></span>`;
+    }).join('');
+
+    return `
+        <div class="skills-section certs-section">
+            <h4>🎓 Certificações (${certs.length})</h4>
+            <div class="certs-summary">
+                <div class="cert-stat"><strong>${certs.length}</strong><small>Total</small></div>
+                <div class="cert-stat"><strong>${countProfessional}</strong><small>Professional</small></div>
+                <div class="cert-stat"><strong>${countAssociate}</strong><small>Associate</small></div>
+                <div class="cert-stat"><strong>${countFoundational}</strong><small>Foundational</small></div>
+                <div class="cert-stat"><strong>+${bonus}</strong><small>Bônus Desemp.</small></div>
+                <div class="cert-stat"><strong>${mediaEmpresa}</strong><small>Média empresa</small></div>
+            </div>
+            <div class="certs-grid">
+                ${badgesHTML}
+            </div>
+        </div>
+    `;
 }
 
 // ============================================
@@ -893,7 +1019,8 @@ document.getElementById('btn-preview-avaliacao').addEventListener('click', funct
     });
 
     const avaliacao = { hard, soft, disciplinar };
-    const desempenho = calcDesempenho(avaliacao);
+    const editandoNome = document.getElementById('input-nome').value.trim();
+    const desempenho = calcDesempenho(avaliacao, editandoNome);
     const potencial = calcPotencial(avaliacao);
     const { row, col } = getNineBoxPos(desempenho, potencial);
     const nineBoxLabel = getNineBoxLabel(row, col);

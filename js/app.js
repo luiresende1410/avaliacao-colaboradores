@@ -444,15 +444,21 @@ async function carregarDados() {
         state.avaliacoes = firebaseAvals;
         console.log(`✅ ${state.colaboradores.length} colaboradores, ${state.avaliacoes.length} avaliações carregadas`);
 
-        // Carregar certificações do Firebase
+        // Carregar certificações do Firebase (merge com dados locais)
         try {
             const certSnapshot = await db.collection("certificacoes").get();
             const firebaseCerts = [];
             certSnapshot.forEach(doc => { firebaseCerts.push({ id: doc.id, ...doc.data() }); });
             if (firebaseCerts.length > 0) {
-                // Substituir dados locais pelos do Firebase
-                CERTIFICACOES_DATA.length = 0;
-                firebaseCerts.forEach(c => CERTIFICACOES_DATA.push(c));
+                // Merge: adicionar do Firebase certs que não existem localmente
+                firebaseCerts.forEach(fc => {
+                    const jaExiste = CERTIFICACOES_DATA.find(c => c.nome === fc.nome && c.cert === fc.cert);
+                    if (!jaExiste) {
+                        CERTIFICACOES_DATA.push(fc);
+                    } else if (!jaExiste.id) {
+                        jaExiste.id = fc.id; // Atualizar ID do Firebase
+                    }
+                });
             }
         } catch (e) { console.warn("Certs não carregadas do Firebase, usando locais"); }
 
@@ -472,6 +478,7 @@ async function carregarDados() {
     popularSelects();
     popularSelectCadastro();
     renderNineBox();
+    renderCertsDashboard();
 }
 
 async function salvarColaborador(dados) {

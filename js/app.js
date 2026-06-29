@@ -20,9 +20,9 @@ const HARD_SKILLS_SRE = [
 ];
 
 const HARD_SKILLS_DEV = [
-    "Python (scripting, backend)",
-    "JavaScript / TypeScript",
-    "Frameworks Web (React, FastAPI, Express, etc.)",
+    "Backend (Python, Java)",
+    "Frontend (TypeScript)",
+    "Frameworks (React, FastAPI, Spring)",
     "APIs REST e Design de Contratos",
     "Banco de Dados SQL (modelagem, queries)",
     "Banco de Dados NoSQL (DynamoDB, MongoDB)",
@@ -32,9 +32,9 @@ const HARD_SKILLS_DEV = [
     "CI/CD (pipelines, deploy automatizado)",
     "IaC (Terraform, Ansible, CloudFormation)",
     "AWS: Serverless (Lambda, API Gateway, Step Functions)",
-    "AWS: Serviços de Aplicação (S3, SQS, SNS, EventBridge)",
+    "AWS: Serviços de Aplicação (ECS, S3, SQS, SNS, EventBridge)",
     "Segurança de Aplicações (OWASP, auth, secrets)",
-    "IA Generativa (AWS Bedrock, Prompt Engineering)",
+    "Desenvolvimento com IA Generativa (AWS Bedrock)",
     "Machine Learning (AWS SageMaker)",
     "Resolução de Problemas e Debugging"
 ];

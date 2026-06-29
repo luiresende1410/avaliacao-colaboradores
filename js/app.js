@@ -818,19 +818,20 @@ function renderCertificacoesHTML(nome) {
     const countFoundational = certs.filter(c => c.nivel === 'Foundational').length;
     const countAssociate = certs.filter(c => c.nivel === 'Associate').length;
     const countProfessional = certs.filter(c => c.nivel === 'Professional').length;
-    const bonus = calcBonusCertificacoes(nome);
 
     const tipoColors = { 'AWS': '#FF9900', 'GCP': '#4285F4', 'Terraform': '#7B42BC', 'Datadog': '#632CA6', 'Outro': '#7D8998' };
 
-    const badgesHTML = certs.length > 0 ? certs.map((c, i) => {
+    const listHTML = certs.length > 0 ? `<ul class="certs-list">${certs.map((c, i) => {
         const color = tipoColors[c.tipo] || '#7D8998';
-        return `<span class="cert-badge" style="border-color:${color};">
-            <span class="cert-tipo" style="background:${color};">${c.tipo}</span>
-            <span class="cert-nome">${c.cert}</span>
+        return `<li class="cert-list-item">
+            <span class="cert-tipo-dot" style="background:${color};"></span>
+            <span class="cert-list-nome">${c.cert}</span>
+            <span class="cert-list-tipo">${c.tipo}</span>
             <span class="cert-nivel nivel-${c.nivel.toLowerCase()}">${c.nivel}</span>
+            ${c.data ? `<span class="cert-list-data">${c.data}</span>` : ''}
             <button class="cert-remove" onclick="removerCertificacao(${i}, '${nome.replace(/'/g, "\\'")}')" title="Remover">×</button>
-        </span>`;
-    }).join('') : '<p style="color:var(--cs-color-text-body-secondary);font-size:var(--cs-font-size-small);">Nenhuma certificação registrada.</p>';
+        </li>`;
+    }).join('')}</ul>` : '<p style="color:var(--cs-color-text-body-secondary);font-size:var(--cs-font-size-small);">Nenhuma certificação registrada.</p>';
 
     return `
         <div class="skills-section certs-section">
@@ -844,12 +845,9 @@ function renderCertificacoesHTML(nome) {
                 <div class="cert-stat"><strong>${countProfessional}</strong><small>Professional</small></div>
                 <div class="cert-stat"><strong>${countAssociate}</strong><small>Associate</small></div>
                 <div class="cert-stat"><strong>${countFoundational}</strong><small>Foundational</small></div>
-                <div class="cert-stat"><strong>+${bonus}</strong><small>Bônus Desemp.</small></div>
                 <div class="cert-stat"><strong>${mediaEmpresa}</strong><small>Média empresa</small></div>
             </div>` : ''}
-            <div class="certs-grid">
-                ${badgesHTML}
-            </div>
+            ${listHTML}
             <div id="cert-form-container" style="display:none;margin-top:var(--cs-space-m);"></div>
         </div>
     `;

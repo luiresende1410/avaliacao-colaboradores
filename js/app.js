@@ -179,6 +179,110 @@ function calcBonusCertificacoes(nome) {
     return Math.min(bonus, 0.5);
 }
 
+async function adicionarCertificacao(nome, tipo, nivel, cert, data) {
+    const novaCert = { nome, tipo, nivel, cert, data: data || '' };
+    CERTIFICACOES_DATA.push(novaCert);
+
+    try {
+        const docRef = await db.collection("certificacoes").add(novaCert);
+        novaCert.id = docRef.id;
+        showToast("Certificação adicionada!", "success");
+    } catch (err) {
+        showToast("Certificação salva localmente", "success");
+    }
+
+    // Re-render se estiver no resumo do colaborador
+    refreshResumoAtual();
+    renderNineBox();
+}
+
+async function removerCertificacao(index, nome) {
+    const cert = CERTIFICACOES_DATA.filter(c => c.nome === nome)[index];
+    if (!cert) return;
+
+    const globalIndex = CERTIFICACOES_DATA.indexOf(cert);
+    if (globalIndex > -1) CERTIFICACOES_DATA.splice(globalIndex, 1);
+
+    if (cert.id) {
+        try { await db.collection("certificacoes").doc(cert.id).delete(); } catch (e) {}
+    }
+
+    showToast("Certificação removida", "success");
+    refreshResumoAtual();
+    renderNineBox();
+}
+
+function refreshResumoAtual() {
+    const email = document.getElementById('colaborador-select').value;
+    if (!email) return;
+    const colab = state.colaboradores.find(c => c.email === email);
+    const avaliacao = getAvaliacaoAtual(email);
+    if (colab && avaliacao) renderResumo(colab, avaliacao);
+}
+
+function mostrarFormCertificacao(nome) {
+    const container = document.getElementById('cert-form-container');
+    container.style.display = 'block';
+    container.innerHTML = `
+        <div class="cert-form-card">
+            <h4>Adicionar Certificação para ${nome}</h4>
+            <div class="cert-form-row">
+                <div class="form-group">
+                    <label>Provedor</label>
+                    <select id="cert-tipo">
+                        <option value="AWS">AWS</option>
+                        <option value="GCP">GCP</option>
+                        <option value="Terraform">Terraform</option>
+                        <option value="Datadog">Datadog</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nível</label>
+                    <select id="cert-nivel">
+                        <option value="Foundational">Foundational</option>
+                        <option value="Associate">Associate</option>
+                        <option value="Professional">Professional</option>
+                    </select>
+                </div>
+            </div>
+            <div class="cert-form-row">
+                <div class="form-group" style="flex:2;">
+                    <label>Nome da Certificação</label>
+                    <input type="text" id="cert-nome-input" placeholder="Ex: AWS Certified Solutions Architect Associate">
+                </div>
+                <div class="form-group">
+                    <label>Data Obtida</label>
+                    <input type="date" id="cert-data">
+                </div>
+            </div>
+            <div class="cert-form-actions">
+                <button class="btn-primary" style="margin:0;" onclick="submitCertificacao('${nome}')">Adicionar</button>
+                <button class="btn-secondary" onclick="document.getElementById('cert-form-container').style.display='none'">Cancelar</button>
+            </div>
+        </div>
+    `;
+}
+
+function submitCertificacao(nome) {
+    const tipo = document.getElementById('cert-tipo').value;
+    const nivel = document.getElementById('cert-nivel').value;
+    const cert = document.getElementById('cert-nome-input').value.trim();
+    const dataRaw = document.getElementById('cert-data').value;
+
+    if (!cert) { showToast("Preencha o nome da certificação", "error"); return; }
+
+    // Converter date input (YYYY-MM-DD) para DD/MM/YYYY
+    let data = '';
+    if (dataRaw) {
+        const [y, m, d] = dataRaw.split('-');
+        data = `${d}/${m}/${y}`;
+    }
+
+    adicionarCertificacao(nome, tipo, nivel, cert, data);
+    document.getElementById('cert-form-container').style.display = 'none';
+}
+
 // ============================================
 // CLASSIFICAÇÃO DAS SOFT SKILLS
 // ============================================
@@ -339,6 +443,19 @@ async function carregarDados() {
         state.colaboradores = firebaseColabs;
         state.avaliacoes = firebaseAvals;
         console.log(`✅ ${state.colaboradores.length} colaboradores, ${state.avaliacoes.length} avaliações carregadas`);
+
+        // Carregar certificações do Firebase
+        try {
+            const certSnapshot = await db.collection("certificacoes").get();
+            const firebaseCerts = [];
+            certSnapshot.forEach(doc => { firebaseCerts.push({ id: doc.id, ...doc.data() }); });
+            if (firebaseCerts.length > 0) {
+                // Substituir dados locais pelos do Firebase
+                CERTIFICACOES_DATA.length = 0;
+                firebaseCerts.forEach(c => CERTIFICACOES_DATA.push(c));
+            }
+        } catch (e) { console.warn("Certs não carregadas do Firebase, usando locais"); }
+
     } catch (err) {
         console.warn("Firebase não configurado, usando dados locais:", err.message);
         state.colaboradores = DADOS_PLANILHA.map(p => ({ id: null, nome: p.nome, email: p.email, area: p.area }));
@@ -692,11 +809,10 @@ function getNineBoxLabel(row, col) {
 // ============================================
 function renderCertificacoesHTML(nome) {
     const certs = getCertificacoes(nome);
-    if (certs.length === 0) return '<div class="skills-section"><h4>🎓 Certificações</h4><p style="color:var(--cs-color-text-body-secondary);font-size:var(--cs-font-size-small);">Nenhuma certificação registrada.</p></div>';
 
     const totalEmpresa = CERTIFICACOES_DATA.length;
     const colabsComCert = [...new Set(CERTIFICACOES_DATA.map(c => c.nome))].length;
-    const mediaEmpresa = (totalEmpresa / colabsComCert).toFixed(1);
+    const mediaEmpresa = colabsComCert > 0 ? (totalEmpresa / colabsComCert).toFixed(1) : '0';
 
     const countFoundational = certs.filter(c => c.nivel === 'Foundational').length;
     const countAssociate = certs.filter(c => c.nivel === 'Associate').length;
@@ -705,14 +821,23 @@ function renderCertificacoesHTML(nome) {
 
     const tipoColors = { 'AWS': '#FF9900', 'GCP': '#4285F4', 'Terraform': '#7B42BC', 'Datadog': '#632CA6', 'Outro': '#7D8998' };
 
-    const badgesHTML = certs.map(c => {
+    const badgesHTML = certs.length > 0 ? certs.map((c, i) => {
         const color = tipoColors[c.tipo] || '#7D8998';
-        return `<span class="cert-badge" style="border-color:${color};"><span class="cert-tipo" style="background:${color};">${c.tipo}</span><span class="cert-nome">${c.cert}</span><span class="cert-nivel nivel-${c.nivel.toLowerCase()}">${c.nivel}</span></span>`;
-    }).join('');
+        return `<span class="cert-badge" style="border-color:${color};">
+            <span class="cert-tipo" style="background:${color};">${c.tipo}</span>
+            <span class="cert-nome">${c.cert}</span>
+            <span class="cert-nivel nivel-${c.nivel.toLowerCase()}">${c.nivel}</span>
+            <button class="cert-remove" onclick="removerCertificacao(${i}, '${nome.replace(/'/g, "\\'")}')" title="Remover">×</button>
+        </span>`;
+    }).join('') : '<p style="color:var(--cs-color-text-body-secondary);font-size:var(--cs-font-size-small);">Nenhuma certificação registrada.</p>';
 
     return `
         <div class="skills-section certs-section">
-            <h4>🎓 Certificações (${certs.length})</h4>
+            <div class="certs-header">
+                <h4>🎓 Certificações (${certs.length})</h4>
+                <button class="btn-secondary" onclick="mostrarFormCertificacao('${nome.replace(/'/g, "\\'")}')">+ Adicionar Certificação</button>
+            </div>
+            ${certs.length > 0 ? `
             <div class="certs-summary">
                 <div class="cert-stat"><strong>${certs.length}</strong><small>Total</small></div>
                 <div class="cert-stat"><strong>${countProfessional}</strong><small>Professional</small></div>
@@ -720,10 +845,11 @@ function renderCertificacoesHTML(nome) {
                 <div class="cert-stat"><strong>${countFoundational}</strong><small>Foundational</small></div>
                 <div class="cert-stat"><strong>+${bonus}</strong><small>Bônus Desemp.</small></div>
                 <div class="cert-stat"><strong>${mediaEmpresa}</strong><small>Média empresa</small></div>
-            </div>
+            </div>` : ''}
             <div class="certs-grid">
                 ${badgesHTML}
             </div>
+            <div id="cert-form-container" style="display:none;margin-top:var(--cs-space-m);"></div>
         </div>
     `;
 }

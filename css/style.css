@@ -496,9 +496,10 @@ form { background: var(--cs-color-background-container); border-radius: var(--cs
 .certs-page-summary { margin-bottom: var(--cs-space-l); }
 .certs-page-stat { font-size: var(--cs-font-size-heading-s); color: var(--cs-color-text-body-secondary); }
 .certs-page-charts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--cs-space-l); }
-.cert-chart-card { background: var(--cs-color-background-container); border: 1px solid var(--cs-color-border-container); border-radius: var(--cs-border-radius-container); padding: var(--cs-space-xl); box-shadow: var(--cs-shadow-container); }
+.cert-chart-card { background: var(--cs-color-background-container); border: 1px solid var(--cs-color-border-container); border-radius: var(--cs-border-radius-container); padding: var(--cs-space-l); box-shadow: var(--cs-shadow-container); max-height: 380px; }
 .cert-chart-card h4 { margin-bottom: var(--cs-space-xxs); font-size: var(--cs-font-size-heading-xs); color: var(--cs-color-text-heading); }
-.cert-chart-card small { display: block; margin-bottom: var(--cs-space-m); font-size: var(--cs-font-size-small); color: var(--cs-color-text-body-secondary); }
+.cert-chart-card small { display: block; margin-bottom: var(--cs-space-s); font-size: var(--cs-font-size-small); color: var(--cs-color-text-body-secondary); }
+.cert-chart-card canvas { max-height: 280px; }
 .cert-form-card { background: var(--cs-color-background-layout-panel); border: 1px solid var(--cs-color-border-container); border-radius: var(--cs-border-radius); padding: var(--cs-space-l); }
 .cert-form-card h4 { margin-bottom: var(--cs-space-m); font-size: var(--cs-font-size-heading-xs); }
 .cert-form-row { display: flex; gap: var(--cs-space-m); margin-bottom: var(--cs-space-s); }

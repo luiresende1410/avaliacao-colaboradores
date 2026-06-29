@@ -1276,8 +1276,9 @@ function renderCertsDashboard() {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 16 } }
+                    legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } }
                 },
                 cutout: '60%'
             }
@@ -1310,6 +1311,7 @@ function renderCertsDashboard() {
             options: {
                 indexAxis: 'y',
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
                 scales: {
                     x: { stacked: true, title: { display: true, text: 'Quantidade' } },
@@ -1341,6 +1343,7 @@ function renderCertsDashboard() {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
                     y: { beginAtZero: true, ticks: { stepSize: 1 } }

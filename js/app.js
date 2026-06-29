@@ -1425,6 +1425,25 @@ function submitCertGlobal() {
 }
 
 // ============================================
+// DARK MODE
+// ============================================
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDark ? 'on' : 'off');
+    document.getElementById('btn-darkmode').textContent = isDark ? '☀️' : '🌙';
+}
+
+// Restaurar preferência salva
+(function() {
+    if (localStorage.getItem('darkMode') === 'on') {
+        document.body.classList.add('dark-mode');
+        const btn = document.getElementById('btn-darkmode');
+        if (btn) btn.textContent = '☀️';
+    }
+})();
+
+// ============================================
 // INIT
 // ============================================
 buildSkillInputs();

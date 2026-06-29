@@ -534,12 +534,13 @@ async function salvarColaborador(dados) {
 // POPULAR SELECTS
 // ============================================
 function popularSelects() {
-    // Colaboradores que têm avaliação no quarter atual
+    // Colaboradores que têm avaliação no quarter atual, em ordem alfabética
     const avaliadosEmails = state.avaliacoes
         .filter(a => a.quarter === state.currentQuarter)
         .map(a => a.email);
 
-    const avaliados = state.colaboradores.filter(c => avaliadosEmails.includes(c.email));
+    const avaliados = state.colaboradores.filter(c => avaliadosEmails.includes(c.email))
+        .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
     const opts = avaliados.map(c => `<option value="${c.email}">${c.nome} (${c.area})</option>`).join('');
 
     document.getElementById('colaborador-select').innerHTML = '<option value="">Selecione um colaborador</option>' + opts;
